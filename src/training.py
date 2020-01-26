@@ -1,52 +1,96 @@
-from fastai import *
-from fastai.vision import *
-
-from pathlib import Path
+"""Performs training and evalution on a segmentation model"""
 
 
-def create_db(path_img, path_lbl, codes, size, bs, split_pct=0.2):
+from fastai.vision import (
+    SegmentationItemList,
+    get_transforms,
+    unet_learner,
+    models,
+    dice
+)
+
+from config import (
+    PATH_IMG,
+    PATH_LBL,
+    CODES,
+    INPUT_SIZE,
+    BATCH_SIZE,
+    FREEZE_LAYER,
+    EPOCHS,
+    LEARNING_RATE,
+    WEIGHT_DECAY,
+    SAVE_MODEL,
+    PATH_TO_TESTING
+)
+
+
+def create_db(path_img, path_lbl, codes, input_size, bs, split_pct=0.2):
     """assumes labels are png"""
     data = (SegmentationItemList.from_folder(path_img)
             .split_by_rand_pct(split_pct)
             .label_from_func(lambda x: path_lbl/f'{x.stem}.png', classes=codes)
-            .transform(get_transforms(flip_vert=True, max_warp=None), tfm_y=True, size=size)
+            .transform(
+                get_transforms(flip_vert=True, max_warp=None),
+                tfm_y=True,
+                size=input_size
+            )
             .databunch(bs=bs)
             .normalize())
     return data
 
 
-def create_unet(data, path_data=None, model_dir='models'):
-    return unet_learner(data, models.resnet34, metrics=dice, path=path_data, model_dir=model_dir)
-
-def find_lr(learner, saved_model=None, unfreeze_till=None):
-    if saved_model != None:
-        learner.load(saved_model); #must be in path and model directory that was specified when creating unet_learner
-    if unfreeze_till != None:
-        learn.unfreeze()
-        learn.freeze_to(unfreeze_till)
-    lr_find(learn)
-    learn.recorder.plot()
-
-def train_model(learner, epochs, lr, wd, save_fname, show_losses=False, show_metrics=False):
-    learner.fit_one_cycle(50, lr, wd)
+def train_model(learner, freeze_layer, epochs, lr, wd, save_model,
+                show_losses=False, show_metrics=False):
+    learner.unfreeze()
+    learner.freeze_to(freeze_layer)
+    learner.fit_one_cycle(epochs, lr, wd)
     if show_losses:
-        learn.recorder.plot_losses()
+        learner.recorder.plot_losses()
     if show_metrics:
-        learn.recorder.plot_metrics()
-    learn.save(save_fname)
+        learner.recorder.plot_metrics()
+    learner.save(save_model)
 
-def eval_model(path, codes, size, bs, learner, train_dirname='train', test_dirname='test', labels_dirname='labels'):
+
+def eval_model(path, codes, input_size, bs, learner,
+               train_dirname='train', test_dirname='test', labels_dirname='labels'):
     data_test = (SegmentationItemList.from_folder(path)
                  .split_by_folder(train=train_dirname, valid=test_dirname)
-                 .label_from_func(lambda x: path/f'{labels_dirname}/{x.stem}.png', classes=codes)
-                 .transform(get_transforms(flip_vert=True, max_warp=None), tfm_y=True, size=size)
+                 .label_from_func(
+                     lambda x: path/f'{labels_dirname}/{x.stem}.png',
+                     classes=codes
+                 )
+                 .transform(
+                     get_transforms(flip_vert=True, max_warp=None),
+                     tfm_y=True,
+                     size=input_size
+                 )
                  .databunch(bs=bs)
                  .normalize())
-    learner.validate(data_test.valid_dl)
+    eval = learner.validate(data_test.valid_dl)
+    return eval
 
-#test create_db, create_unet, and find_lr
-path_img = Path('dataset/good/train_x')
-path_lbl = Path('dataset/good/test_x')
-data = create_db(path_img, path_lbl, array(['background', 'particles'], (192, 256), 16))
-learner = create_unet(data)
-find_lr(learner, unfreeze_till=2)
+
+print("Creating databunch and learner...")
+data = create_db(PATH_IMG, PATH_LBL, CODES, INPUT_SIZE, BATCH_SIZE)
+learner = unet_learner(data, models.resnet34, metrics=dice)
+print("Training model...")
+train_model(
+    learner,
+    FREEZE_LAYER,
+    EPOCHS,
+    LEARNING_RATE,
+    WEIGHT_DECAY,
+    SAVE_MODEL
+)
+print("Evaluating model...")
+eval = eval_model(
+    PATH_TO_TESTING,
+    CODES, INPUT_SIZE,
+    BATCH_SIZE,
+    learner
+)
+print(f'Loss = {eval[0]}, Accuracy = {eval[1]}')
+print(
+    "You have successfully trained and evaluated your model!"
+    "Please find it in the appropriate directory."
+)

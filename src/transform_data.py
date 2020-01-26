@@ -1,3 +1,6 @@
+"""Module containing functions for transforming data to be put into deep learning model"""
+
+
 import numpy as np
 import cv2
 from skimage import transform
@@ -56,25 +59,33 @@ def replace_neighbor(img, remove_coord):
     top_neighbor = remove_y1 - 1
     if bot_neighbor == img.shape[0]:
         for i in range(remove_y1, remove_y2):
-            imgcopy[i, remove_x1:remove_x2, :] = imgcopy[top_neighbor,
-                                                         remove_x1:remove_x2,
-                                                         :]
+            imgcopy[i, remove_x1:remove_x2, :] = imgcopy[
+                                                     top_neighbor,
+                                                     remove_x1:remove_x2,
+                                                     :
+                                                 ]
     elif top_neighbor == 0:
         for i in range(remove_y1, remove_y2):
-            imgcopy[i, remove_x1:remove_x2, :] = imgcopy[bot_neighbor,
-                                                         remove_x1:remove_x2,
-                                                         :]
+            imgcopy[i, remove_x1:remove_x2, :] = imgcopy[
+                                                     bot_neighbor,
+                                                     remove_x1:remove_x2,
+                                                     :
+                                                 ]
     else:
         ylim = remove_y2 - (remove_height // 2)
         for i in range(remove_y1, remove_y2):
             if i <= ylim:
-                imgcopy[i, remove_x1:remove_x2, :] = imgcopy[top_neighbor,
-                                                             remove_x1:remove_x2,
-                                                             :]
+                imgcopy[i, remove_x1:remove_x2, :] = imgcopy[
+                                                         top_neighbor,
+                                                         remove_x1:remove_x2,
+                                                         :
+                                                     ]
             else:
-                imgcopy[i, remove_x1:remove_x2, :] = imgcopy[bot_neighbor,
-                                                             remove_x1:remove_x2,
-                                                             :]
+                imgcopy[i, remove_x1:remove_x2, :] = imgcopy[
+                                                         bot_neighbor,
+                                                         remove_x1:remove_x2,
+                                                         :
+                                                     ]
     return imgcopy
 
 
@@ -94,18 +105,22 @@ def find_remove_box(img, roi, threshold=250):
     # Find remove box
     img_final = cv2.addWeighted(vert_lines_img, 0.5, hori_lines_img, 0.5, 0.0)
     img_final = cv2.erode(~img_final, kernel, iterations=2)
-    ret, thresh2 = cv2.threshold(img_final,
-                                 128,
-                                 255,
-                                 cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    ret, thresh2 = cv2.threshold(
+        img_final,
+        128,
+        255,
+        cv2.THRESH_BINARY | cv2.THRESH_OTSU
+    )
     if threshold >= 128:
         remove_box = np.argwhere(thresh2 == 0)
     else:
         remove_box = np.argwhere(thresh2 == 255)
-    remove_box = (remove_box[0, 1] + x1,
-                  remove_box[0, 0] + y1,
-                  remove_box[-1, 1] + x1,
-                  remove_box[-1, 0] + y1)
+    remove_box = (
+        remove_box[0, 1] + x1,
+        remove_box[0, 0] + y1,
+        remove_box[-1, 1] + x1,
+        remove_box[-1, 0] + y1
+    )
     return remove_box
 
 
