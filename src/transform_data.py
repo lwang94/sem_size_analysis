@@ -1,13 +1,41 @@
-"""Module containing functions for transforming data to be put into deep learning model"""
+"""
+Module containing functions for transforming data
+to be put into deep learning model
+"""
 
 
 import numpy as np
 import cv2
 from skimage import transform
+from fastai.vision import Image
+from torch import FloatTensor
+
+
+def fastai_image(img):
+    """Turns numpy array into fastai Image object"""
+    img = FloatTensor(img)
+    img = img.permute(2, 0, 1)
+    return Image(img)
 
 
 def resize(img, size, order=1):
-    """simple interpolation is better (more easily predict output)?"""
+    """
+    Resizes img into appropriate size using Nth order interpolation
+
+    Parameters
+    ------------------------------------------
+    img : ndarray
+        Contains image data
+    size : tuple
+        Contains width and height for resized image
+    order : int, optional
+        Order of the spline interpolation. Has to be in range 0-5.
+        Defaults to 1.
+
+    Returns
+    ------------------------------------
+    resized_img : ndarray
+    """
     return transform.resize(img, size, order=order)
 
 
