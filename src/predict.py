@@ -78,17 +78,16 @@ def predict_segment(learner, img):
     return pred.data
 
 
-def get_size_distr(learner, img):
+def get_size_distr(pred):
     """
     Obtains the size distribution of particles in an image
     using a deep learning based model.
 
     Parameters
     -------------------------------------------------
-    learner : Learner object
-        The learner used to perform the prediction
-    img : Image object
-        The input image. Should be a fastai Image object.
+    pred : ndarray
+        The predicted segmentation mask for the image.
+        Should only have 0s and 1s.
 
     Returns
     ------------------------------------------------
@@ -97,7 +96,7 @@ def get_size_distr(learner, img):
         image as determined by the model. Does not include
         the background.
     """
-    pred = predict_segment(learner, img)
-    pred_labeled = measure.label(pred, background=255, connectivity=2)
+    pred_labeled = measure.label(pred, background=255, connectivity=1)
     unique, counts = np.unique(pred_labeled, return_counts=True)
     return counts[1:]
+
