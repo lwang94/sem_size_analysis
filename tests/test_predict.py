@@ -1,7 +1,5 @@
 import matplotlib.image as mpimg
 
-# import sys
-# sys.path.insert(1, 'C:/Users/lawre/Documents/TEM_ML')
 from ..src import predict
 from ..src.transform_data import resize, fastai_image
 
@@ -39,7 +37,7 @@ def test_predict_segment(load_learner_for_test):
     img = fastai_image(img)
     pred = predict.predict_segment(learn, img)
     assert pred.shape == (1, 192, 256)
-    assert list(np.unique(pred)) == [0, 1]
+    assert sorted(list(np.unique(pred))) == [0, 1]
 
 
 def test_get_size_distr():
@@ -51,7 +49,8 @@ def test_get_size_distr():
          [255, 255, 0,   0,   0]]
     )
 
-    size_distr = predict.get_size_distr(pred)
+    labeled, size_distr = predict.get_size_distr(pred)
+    assert labeled.shape == (5, 5)
     assert len(size_distr) == 2
-    assert size_distr.mean() == 5
+    assert np.allclose(size_distr.mean(), 5)
 

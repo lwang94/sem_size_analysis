@@ -98,5 +98,5 @@ def get_size_distr(pred):
     """
     pred_labeled = measure.label(pred, background=255, connectivity=1)
     unique, counts = np.unique(pred_labeled, return_counts=True)
-    return counts[1:]
+    return pred_labeled, unique[1:], counts[1:]
 

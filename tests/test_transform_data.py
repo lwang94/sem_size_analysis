@@ -1,7 +1,5 @@
 import matplotlib.image as mpimg
 
-# import sys
-# sys.path.insert(1, 'C:/Users/lawre/Documents/TEM_ML')
 from ..src import transform_data as td
 
 from pathlib import Path
