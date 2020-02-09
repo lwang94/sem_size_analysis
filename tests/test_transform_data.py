@@ -9,6 +9,7 @@ def test_resize():
     img_path = (
         Path(__file__).parent
         / 'images'
+        / 'train_x'
         / 'SEM_image_of_red_blood_cell.jpg'
     )
     img = mpimg.imread(img_path)
@@ -20,6 +21,7 @@ def test_make_3channel():
     img_path = (
         Path(__file__).parent
         / 'images'
+        / 'train_x'
         / 'SEM_image_of_blood_cells.jpg'
     )
     grey_img = mpimg.imread(img_path)

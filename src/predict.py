@@ -9,17 +9,13 @@ from fastai.vision import (
 )
 
 
-def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
-                 split_pct=0.2):
+def load_learner(path_img, path_lbl, codes, input_size, bs,
+                 pretrained = None, split_pct=0.2):
     """
     Load the learner used to make the prediction.
 
     Parameters
     ---------------------------------------
-    model_name : str
-        Filename of the learner to be loaded. Should be located in the
-        same directory as the Learner. See the fastai Learner documentation
-        for more details.
     path_img : Path object
         Path to the directory containing the training images.
     path_lbl : Path object
@@ -34,6 +30,10 @@ def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
         your learner.
     bs : int
         Batch size
+    pretrained : str, None, optional
+        Filename of the learner to be loaded. Should be located in the
+        same directory as the Learner. See the fastai Learner documentation
+        for more details. Defaults to None.
     split_pct : float, optional
         The percentage of images that will be put into your validation set.
         Defaults to 20%.
@@ -54,7 +54,9 @@ def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
             .databunch(bs=bs)
             .normalize())
     learner = unet_learner(data, models.resnet34, metrics=dice)
-    learner.load(model_name)
+    if pretrained != None:
+        assert isinstance(pretrained, str), "pretrained must be string"
+        learner.load(pretrained)
     return learner
 
 

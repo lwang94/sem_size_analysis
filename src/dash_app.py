@@ -78,12 +78,12 @@ def get_prediction(contents):
     # load model
     data_path = Path(__file__).parents[1] / 'data' / 'dataset' / 'good'
     learn = pred.load_learner(
-        'stage-2_bs16',
         Path(data_path) / 'train_x',
         Path(data_path) /'train_y_png',
         np.array(['background', 'particle'], dtype='<U17'),
         (192, 256),
-        16
+        16,
+        pretrained='stage-2_bs16'
      )
 
     # make prediction

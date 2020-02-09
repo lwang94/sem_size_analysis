@@ -12,14 +12,13 @@ import pytest
 
 @pytest.fixture
 def load_learner_for_test():
-    data_path = Path(__file__).parents[1] / 'data' / 'dataset' / 'good'
+    data_path = Path(__file__).parent / 'images'
     learn = predict.load_learner(
-        'stage-2_bs16',
         Path(data_path) / 'train_x',
-        Path(data_path) / 'train_y_png',
+        Path(data_path) / 'train_y',
         np.array(['background', 'particle'], dtype='<U17'),
         (192, 256),
-        16
+        2
      )
     return learn
 
@@ -37,6 +36,7 @@ def test_predict_segment(load_learner_for_test):
     img_path = (
         Path(__file__).parent
         / 'images'
+        / 'train_x'
         / 'L2_5b095b8603ce97661d9a01918cf4bd53.jpg'
     )
     img = mpimg.imread(img_path)
