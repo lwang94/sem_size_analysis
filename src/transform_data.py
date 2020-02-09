@@ -5,7 +5,6 @@ to be put into deep learning model
 
 
 import numpy as np
-import cv2
 from skimage import transform
 from fastai.vision import Image
 from torch import FloatTensor
@@ -117,41 +116,6 @@ def replace_neighbor(img, remove_coord):
                                                          :
                                                      ]
     return imgcopy
-
-
-def find_remove_box(img, roi, threshold=250):
-    x1, y1, x2, y2 = roi
-    img = img[y1:y2, x1:x2, :]
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    ret, thresh = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
-    # Find verticle and horizontal lines in image
-    vert_kern = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 10))
-    hori_kern = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 1))
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-    img_v = cv2.erode(thresh, vert_kern, iterations=3)
-    vert_lines_img = cv2.dilate(img_v, vert_kern, iterations=5)
-    img_h = cv2.erode(thresh, hori_kern, iterations=3)
-    hori_lines_img = cv2.dilate(img_h, hori_kern, iterations=5)
-    # Find remove box
-    img_final = cv2.addWeighted(vert_lines_img, 0.5, hori_lines_img, 0.5, 0.0)
-    img_final = cv2.erode(~img_final, kernel, iterations=2)
-    ret, thresh2 = cv2.threshold(
-        img_final,
-        128,
-        255,
-        cv2.THRESH_BINARY | cv2.THRESH_OTSU
-    )
-    if threshold >= 128:
-        remove_box = np.argwhere(thresh2 == 0)
-    else:
-        remove_box = np.argwhere(thresh2 == 255)
-    remove_box = (
-        remove_box[0, 1] + x1,
-        remove_box[0, 0] + y1,
-        remove_box[-1, 1] + x1,
-        remove_box[-1, 0] + y1
-    )
-    return remove_box
 
 
 def replace_whitewm_constant(img, roi, constant, threshold=225):

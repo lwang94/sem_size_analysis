@@ -3,14 +3,6 @@ python:
  - '3.8'
 install:
  - pip install -r requirements.txt
-before_script:
- - git clone https://github.com/Itseez/opencv.git
- - cd opencv
- - mkdir build
- - cd build
- - cmake ..
- - make -j4
- - sudo make -j4 install
 script:
  - pytest
  - flake8
