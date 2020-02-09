@@ -90,7 +90,8 @@ def train_model(learner, freeze_layer, epochs, lr, wd, save_model,
 
 
 def eval_model(path, codes, input_size, bs, learner,
-               train_dirname='train', test_dirname='test', labels_dirname='labels'):
+               train_dirname='train', test_dirname='test',
+               labels_dirname='labels'):
     """
     Evaluates the model on a test set.
 
@@ -174,6 +175,5 @@ def train_and_eval():
     )
 
 
-if name == '__main__':
+if __name__ == '__main__':
     train_and_eval()
-

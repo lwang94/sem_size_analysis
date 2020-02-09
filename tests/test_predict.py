@@ -9,18 +9,20 @@ from fastai.basic_train import Learner
 
 import pytest
 
+
 @pytest.fixture
 def load_learner_for_test():
     data_path = Path(__file__).parents[1] / 'data' / 'dataset' / 'good'
     learn = predict.load_learner(
         'stage-2_bs16',
         Path(data_path) / 'train_x',
-        Path(data_path) /'train_y_png',
+        Path(data_path) / 'train_y_png',
         np.array(['background', 'particle'], dtype='<U17'),
         (192, 256),
         16
      )
     return learn
+
 
 def test_load_learner(load_learner_for_test):
     learn = load_learner_for_test
@@ -29,9 +31,14 @@ def test_load_learner(load_learner_for_test):
     for i in range(len(learn.layer_groups)):
         assert len(learn.layer_groups[i]) == length_lg[i]
 
+
 def test_predict_segment(load_learner_for_test):
     learn = load_learner_for_test
-    img_path = Path(__file__).parent / 'images' / 'L2_5b095b8603ce97661d9a01918cf4bd53.jpg'
+    img_path = (
+        Path(__file__).parent
+        / 'images'
+        / 'L2_5b095b8603ce97661d9a01918cf4bd53.jpg'
+    )
     img = mpimg.imread(img_path)
     img = resize(img, (192, 256))
     img = fastai_image(img)
@@ -49,8 +56,8 @@ def test_get_size_distr():
          [255, 255, 0,   0,   0]]
     )
 
-    labeled, size_distr = predict.get_size_distr(pred)
+    labeled, unique, size_distr = predict.get_size_distr(pred)
     assert labeled.shape == (5, 5)
+    assert len(unique) == 2
     assert len(size_distr) == 2
     assert np.allclose(size_distr.mean(), 5)
-
