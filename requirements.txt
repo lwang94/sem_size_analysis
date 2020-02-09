@@ -35,8 +35,6 @@ kiwisolver==1.1.0
 MarkupSafe==1.1.1
 matplotlib==3.1.2
 mccabe==0.6.1
-mkl-fft
-mkl-random==1.1.0
 mkl-service==2.3.0
 more-itertools==8.0.2
 murmurhash==1.0.2
