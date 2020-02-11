@@ -172,7 +172,7 @@ def whitewm_moving_avg(img, roi,
 
 
 
-# img = mpimg.imread('C:/Users/lawre/Documents/sem_size_analysis/data/dataset/good/train_x/L2_7d7ca0943bf232354a4182ce3b17c928.jpg')
+# img = mpimg.imread('C:/Users/lawre/Documents/sem_size_analysis/data/dataset/test_x/L2_d629a43bffec9b91a308f3aaf344f3eb.jpg')
 # # img = reflect_pad(img, (0, 384, 1024, 768))
 
 # remove_x1, remove_y1, remove_x2, remove_y2 = 630, 325, 1024, 768
