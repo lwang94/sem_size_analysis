@@ -37,7 +37,7 @@ def test_predict_segment(load_learner_for_test):
         Path(__file__).parent
         / 'images'
         / 'train_x'
-        / 'L2_5b095b8603ce97661d9a01918cf4bd53.jpg'
+        / 'L2_0a7efff5757e6b543ee1a0d17328c881.jpg'
     )
     img = mpimg.imread(img_path)
     img = resize(img, (192, 256))
