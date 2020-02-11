@@ -10,7 +10,7 @@ from fastai.vision import (
 
 
 def load_learner(path_img, path_lbl, codes, input_size, bs,
-                 pretrained = None, split_pct=0.2):
+                 pretrained=None, split_pct=0.2):
     """
     Load the learner used to make the prediction.
 
@@ -54,7 +54,7 @@ def load_learner(path_img, path_lbl, codes, input_size, bs,
             .databunch(bs=bs)
             .normalize())
     learner = unet_learner(data, models.resnet34, metrics=dice)
-    if pretrained != None:
+    if pretrained is not None:
         assert isinstance(pretrained, str), "pretrained must be string"
         learner.load(pretrained)
     return learner

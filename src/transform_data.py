@@ -9,8 +9,6 @@ from skimage import transform
 from fastai.vision import Image
 from torch import FloatTensor
 
-import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
 
 def fastai_image(img):
     """Turns numpy array into fastai Image object"""
@@ -169,22 +167,3 @@ def whitewm_moving_avg(img, roi,
 
     imgcopy[y1:y2, x1:x2, :] = img_roi
     return imgcopy
-
-
-
-# img = mpimg.imread('C:/Users/lawre/Documents/sem_size_analysis/data/dataset/test_x/L2_d629a43bffec9b91a308f3aaf344f3eb.jpg')
-# # img = reflect_pad(img, (0, 384, 1024, 768))
-
-# remove_x1, remove_y1, remove_x2, remove_y2 = 630, 325, 1024, 768
-# remove_width = remove_x2 - remove_x1
-
-# xlim = remove_x1 - remove_width
-# reflect = img[remove_y1:remove_y2, xlim:remove_x1, :]
-# reflect = np.fliplr(reflect)
-# imgcopy = img.copy()
-# imgcopy[remove_y1:remove_y2, remove_x1:remove_x2, :] = reflect
-
-
-
-# plt.imshow(imgcopy)
-# plt.show()
