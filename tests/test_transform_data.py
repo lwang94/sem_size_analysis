@@ -1,14 +1,28 @@
 import matplotlib.image as mpimg
-import matplotlib.pyplot as plt
 
-import sys
-sys.path.insert(1, 'C:/Users/lawre/Documents/TEM_ML')
-import sem_size_analysis.transform_data as src
+from ..src import transform_data as td
 
-from skimage import measure
 from pathlib import Path
 
+
+def test_resize():
+    img_path = (
+        Path(__file__).parent
+        / 'images'
+        / 'train_x'
+        / 'L2_0a7efff5757e6b543ee1a0d17328c881.jpg'
+    )
+    img = mpimg.imread(img_path)
+    img = td.resize(img, (192, 256))
+    assert img.shape == (192, 256, 3)
+
+
 def test_make_3channel():
-    grey_img = mpimg.imread('C:/Users/lawre/Documents/TEM_ML/tests/images/SEM_image_of_blood_cells.jpg')
-    colour_img = src.make_3channel(grey_img)
+    img_path = (
+        Path(__file__).parent
+        / 'images'
+        / 'SEM_image_of_blood_cells.jpg'
+    )
+    grey_img = mpimg.imread(img_path)
+    colour_img = td.make_3channel(grey_img)
     assert colour_img.shape == (grey_img.shape[0], grey_img.shape[1], 3)

@@ -90,7 +90,8 @@ def train_model(learner, freeze_layer, epochs, lr, wd, save_model,
 
 
 def eval_model(path, codes, input_size, bs, learner,
-               train_dirname='train', test_dirname='test', labels_dirname='labels'):
+               train_dirname='train', test_dirname='test',
+               labels_dirname='labels'):
     """
     Evaluates the model on a test set.
 
@@ -140,34 +141,39 @@ def eval_model(path, codes, input_size, bs, learner,
     return eval
 
 
-print("Creating databunch and learner...")
-data = create_databunch(
-    cf.PATH_IMG,
-    cf.PATH_LBL,
-    cf.CODES,
-    cf.INPUT_SIZE,
-    cf.BATCH_SIZE
-)
-learner = unet_learner(data, models.resnet34, metrics=dice)
-print("Training model...")
-train_model(
-    learner,
-    cf.FREEZE_LAYER,
-    cf.EPOCHS,
-    cf.LEARNING_RATE,
-    cf.WEIGHT_DECAY,
-    cf.SAVE_MODEL
-)
-print("Evaluating model...")
-eval = eval_model(
-    cf.PATH_TO_TESTING,
-    cf.CODES,
-    cf.INPUT_SIZE,
-    cf.BATCH_SIZE,
-    learner
-)
-print(f'Loss = {eval[0]}, Accuracy = {eval[1]}')
-print(
-    "You have successfully trained and evaluated your model!"
-    "Please find it in the appropriate directory."
-)
+def train_and_eval():
+    print("Creating databunch and learner...")
+    data = create_databunch(
+        cf.PATH_IMG,
+        cf.PATH_LBL,
+        cf.CODES,
+        cf.INPUT_SIZE,
+        cf.BATCH_SIZE
+    )
+    learner = unet_learner(data, models.resnet34, metrics=dice)
+    print("Training model...")
+    train_model(
+        learner,
+        cf.FREEZE_LAYER,
+        cf.EPOCHS,
+        cf.LEARNING_RATE,
+        cf.WEIGHT_DECAY,
+        cf.SAVE_MODEL
+    )
+    print("Evaluating model...")
+    eval = eval_model(
+        cf.PATH_TO_TESTING,
+        cf.CODES,
+        cf.INPUT_SIZE,
+        cf.BATCH_SIZE,
+        learner
+    )
+    print(f'Loss = {eval[0]}, Accuracy = {eval[1]}')
+    print(
+        "You have successfully trained and evaluated your model!"
+        "Please find it in the appropriate directory."
+    )
+
+
+if __name__ == '__main__':
+    train_and_eval()

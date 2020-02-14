@@ -9,17 +9,13 @@ from fastai.vision import (
 )
 
 
-def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
-                 split_pct=0.2):
+def load_learner(path_img, path_lbl, codes, input_size, bs,
+                 pretrained=None, split_pct=0.2):
     """
     Load the learner used to make the prediction.
 
     Parameters
     ---------------------------------------
-    model_name : str
-        Filename of the learner to be loaded. Should be located in the
-        same directory as the Learner. See the fastai Learner documentation
-        for more details.
     path_img : Path object
         Path to the directory containing the training images.
     path_lbl : Path object
@@ -34,6 +30,10 @@ def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
         your learner.
     bs : int
         Batch size
+    pretrained : str, None, optional
+        Filename of the learner to be loaded. Should be located in the
+        same directory as the Learner. See the fastai Learner documentation
+        for more details. Defaults to None.
     split_pct : float, optional
         The percentage of images that will be put into your validation set.
         Defaults to 20%.
@@ -54,7 +54,9 @@ def load_learner(model_name, path_img, path_lbl, codes, input_size, bs,
             .databunch(bs=bs)
             .normalize())
     learner = unet_learner(data, models.resnet34, metrics=dice)
-    learner.load(model_name)
+    if pretrained is not None:
+        assert isinstance(pretrained, str), "pretrained must be string"
+        learner.load(pretrained)
     return learner
 
 
@@ -78,17 +80,16 @@ def predict_segment(learner, img):
     return pred.data
 
 
-def get_size_distr(learner, img):
+def get_size_distr(pred):
     """
     Obtains the size distribution of particles in an image
     using a deep learning based model.
 
     Parameters
     -------------------------------------------------
-    learner : Learner object
-        The learner used to perform the prediction
-    img : Image object
-        The input image. Should be a fastai Image object.
+    pred : ndarray
+        The predicted segmentation mask for the image.
+        Should only have 0s and 1s.
 
     Returns
     ------------------------------------------------
@@ -97,7 +98,6 @@ def get_size_distr(learner, img):
         image as determined by the model. Does not include
         the background.
     """
-    pred = predict_segment(learner, img)
-    pred_labeled = measure.label(pred, background=255, connectivity=2)
+    pred_labeled = measure.label(pred, background=255, connectivity=1)
     unique, counts = np.unique(pred_labeled, return_counts=True)
-    return counts[1:]
+    return pred_labeled, unique[1:], counts[1:]
