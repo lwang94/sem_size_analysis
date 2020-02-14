@@ -8,7 +8,6 @@ import base64
 import numpy as np
 import io
 from PIL import Image
-from matplotlib.pyplot import Figure
 
 import transform_data as td
 import predict as pred
@@ -21,7 +20,7 @@ import time
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # global variables
-data_path = Path.cwd()/ '..' / 'data' / 'dataset' / 'good'
+data_path = Path.cwd() / '..' / 'data' / 'dataset' / 'good'
 learn = pred.load_learner(
     Path(data_path) / 'train_x',
     Path(data_path) / 'train_y_png',
@@ -76,9 +75,10 @@ dash_app.layout = html.Div([
                 ),
                 html.P(
                     children="""
-                    If the above image does not provide a satisfactory segmentation
-                    of the uploaded image, you can click on different segments to remove them
-                    from the image and size distribution histogram above.
+                    If the above image does not provide a satisfactory
+                    segmentation of the uploaded image, you can click
+                    on different segments to remove them from the image
+                    and size distribution histogram above.
                     """,
                     style={'margin-left': 150, 'margin-right': 150}
                 )
@@ -109,6 +109,7 @@ def numpy_2_b64(arr, enc_format='png'):
     img_pil.save(buff, format=enc_format)
     return base64.b64encode(buff.getvalue()).decode("utf-8")
 
+
 @dash_app.callback(
     Output('instruction_paragraph', 'children'),
     [Input('instruction_button', 'n_clicks')]
@@ -118,13 +119,18 @@ def show_instructions(n_clicks):
         return ''
     else:
         return """
-        SAEMI is a tool for obtaining a Size Analysis of (nano)particles in Electron Microscopy Images. It uses a deep learning model
-        trained on an SEM dataset from NFFA-Europe found here: https://b2share.eudat.eu/records/80df8606fcdb4b2bae1656f0dc6db8ba. To
-        obtain a size analysis, first upload an Electron Microscopy image using the Upload button below. The tool will then predict
-        how to segment the particles from the background using a model trained through deep learning. After segmentation, the tool will
-        label each separate segment and count the number of pixels in each segment. This size distribution is then displayed in a
-        histogram which can be used to determine properties such as the mean size, median size or standard deviation of sizes in the image.
-        Thank you for considering using this tool and any additional feedback is always welcome. Good luck!
+        SAEMI is a tool for obtaining a Size Analysis of particles
+        in Electron Microscopy Images. To obtain a size analysis,
+        first upload an Electron Microscopy image using the Upload
+        button below. The tool will then predict how to segment the
+        particles from the background using a model trained through
+        deep learning. After segmentation, the tool will label each
+        separate segment and count each segment's number of pixels.
+        This size distribution is then displayed in a histogram which
+        can be used to determine properties such as the mean size,
+        median size or standard deviation of sizes in the image.
+        Thank you for considering using this tool and any additional
+        feedback is always welcome. Good luck!
         """
 
 
@@ -182,7 +188,10 @@ def get_size_distr(pred_json, click, size_distr_json):
     start = time.time()
     if (
         (size_distr_json is None)
-        or (data_pred['ximage_list'] != json.loads(size_distr_json)['ximage_list'])
+        or (
+            data_pred['ximage_list']
+            != json.loads(size_distr_json)['ximage_list']
+        )
     ):
         # load predictions
         pred_data = np.asarray(data_pred['yimage_list'], dtype=np.uint8)
@@ -269,7 +278,10 @@ def upload_images(pred_json):
     return html.Div([
         html.Div(
             children=[
-                html.H2(children='Original Image', style={'textAlign': 'left'}),
+                html.H2(
+                    children='Original Image',
+                    style={'textAlign': 'left'}
+                ),
                 html.Img(
                     src=data['ximage_b64'],
                     style={
@@ -309,7 +321,7 @@ def upload_images(pred_json):
                             }
                         )
                     ],
-                    style={'position':'relative'}
+                    style={'position': 'relative'}
                 )
             ],
             style={'textAlign': 'left'}
@@ -323,7 +335,6 @@ def upload_images(pred_json):
 )
 def show_labeled_pred(size_distr_json):
     data = json.loads(size_distr_json)
-    start = time.time()
     return {
         'data': [go.Scattergl(
             x=[i for j in range(192) for i in range(256)],
