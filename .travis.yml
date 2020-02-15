@@ -1,15 +1,10 @@
-os: windows
-language: sh
+language: python
 python:
  - '3.8'
 before_install:
- - choco install python3
- - export PATH="/c/Python37:/c/Python37/Script:$PATH"
- - python -m pip install --upgrade pip wheel
+ - sudo apt-get update
 install:
  - pip install -r requirements.txt
 script:
  - pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/
  - flake8
-after_sucess:
- - codecov
