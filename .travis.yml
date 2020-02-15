@@ -4,7 +4,7 @@ python:
 before_install:
  - sudo apt-get update
 install:
- - pip install -r requirements.txt --allow-external
+ - pip install -r requirements.txt --allow-all-external
 script:
  - pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/
  - flake8
