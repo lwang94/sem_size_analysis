@@ -4,7 +4,7 @@ python:
  - '3.8'
 before_install:
  - choco install python3
- - export PATH="/c/Python38:/c/Python38/Script:$PATH"
+ - export PATH="/c/Python37:/c/Python37/Script:$PATH"
  - python -m pip install --upgrade pip wheel
 install:
  - pip install -r requirements.txt
