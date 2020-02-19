@@ -7,4 +7,3 @@ setup(
     packages=['src', ],
     long_description=open('README.md').read()
 )
-
