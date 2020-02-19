@@ -2,5 +2,4 @@
 omit = 
  tests\*
  src\training.py
- src\config.py
  src\dash_app.py

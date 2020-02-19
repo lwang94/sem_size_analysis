@@ -9,11 +9,11 @@ import requests
 import numpy as np
 
 
-# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 dash_app = dash.Dash(
     __name__,
-    # external_stylesheets=external_stylesheets
+    external_stylesheets=external_stylesheets
 )
 
 

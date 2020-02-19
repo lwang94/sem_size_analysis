@@ -1,5 +1,6 @@
 import matplotlib.image as mpimg
 from fastai.vision import load_learner
+import gdown
 
 from ..src import predict
 from ..src.transform_data import resize, fastai_image
@@ -15,12 +16,18 @@ def test_predict_segment():
     values.
     """
     # load model
-    model_path = (
-        Path(__file__).parent
-        / '..'
-        / 'models'
-    )
-    learn = load_learner(model_path, 'stage-2_bs16.pkl')
+    try:
+        model_path = Path(__file__).parents[1]
+        learn = load_learner(model_path, 'stage-2_bs16.pkl')
+    except IOError:
+        url = (
+            'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
+        )
+        output = 'stage-2_bs16.pkl'
+        gdown.download(url, output, quiet=False)
+
+        model_path = Path(__file__).parents[1]
+        learn = load_learner(model_path, output)
 
     # load test image
     img_path = (
