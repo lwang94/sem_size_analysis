@@ -2,14 +2,6 @@ from ..src import config as cf
 import numpy as np
 
 
-def test_path_img():
-    assert cf.PATH_IMG.exists()
-
-
-def test_path_lbl():
-    assert cf.PATH_LBL.exists()
-
-
 def test_codes():
     assert isinstance(cf.CODES, np.ndarray)
 
@@ -41,6 +33,3 @@ def test_weight_decay():
 def test_save_model():
     assert isinstance(cf.SAVE_MODEL, str)
 
-
-def test_path_to_testing():
-    assert cf.PATH_TO_TESTING.exists()
