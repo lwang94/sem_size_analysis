@@ -4,38 +4,75 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
-import base64
-import numpy as np
-import io
-from PIL import Image
-
-import transform_data as td
-import predict as pred
-
-from pathlib import Path
 import json
+import requests
+import numpy as np
 
-import time
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-# global variables
-data_path = Path.cwd() / '..' / 'data' / 'dataset' / 'good'
-learn = pred.load_learner(
-    Path(data_path) / 'train_x',
-    Path(data_path) / 'train_y_png',
-    np.array(['background', 'particle'], dtype='<U17'),
-    (192, 256),
-    16,
-    pretrained='stage-2_bs16'
-)
+# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 dash_app = dash.Dash(
     __name__,
-    external_stylesheets=external_stylesheets
+    # external_stylesheets=external_stylesheets
 )
+
+
+def background_scatter_plot_for_clickdata():
+    """
+    Creates a dense scatter plot behind the labeled
+    prediction image so that users can click on points
+    in the image and the app can recieve the coordinates
+    """
+    return dcc.Graph(
+        id='scatterclick',
+        figure={
+            'data': [
+                go.Scattergl(
+                    x=[i for j in range(192) for i in range(256)],
+                    y=[j for j in range(192) for i in range(256)],
+                    mode='markers',
+                    marker_opacity=0
+                )
+            ],
+            'layout': {
+                'margin': {
+                    'r': 0,
+                    'l': 0,
+                    't': 0,
+                    'b': 0
+                },
+                'xaxis': {
+                    'range': [0, 255],
+                    'showgrid': False,
+                    'showticklabels': False,
+                    'zeroline': False
+                },
+                'yaxis': {
+                    'showgrid': False,
+                    'showticklabels': False,
+                    'zeroline': False
+                },
+                'clickmode': 'event',
+                'hovermode': 'closest',
+                'height': 632,
+                'width': 768
+            }
+        },
+        style={
+            'position': 'absolute',
+            'top': 0,
+            'left': 0,
+            'opacity': 0.2
+        }
+    )
+
+
+# dashboard layout
 dash_app.layout = html.Div([
+    # Title
     html.H1(children='SAEMI', style={'textAlign': 'center'}),
+
+    # Instructions
     html.Div(
         children=[
             html.Button(
@@ -49,11 +86,15 @@ dash_app.layout = html.Div([
         ],
         style={'textAlign': 'center'}
     ),
+
+    # Upload file button
     dcc.Upload(
         id='upload-image',
         children=html.Button('Upload File'),
         style={'display': 'flex', 'justify-content': 'center'}
     ),
+
+    # Display filename after uploading
     html.H1(
         id='file_name',
         style={
@@ -63,51 +104,116 @@ dash_app.layout = html.Div([
         }
     ),
     html.Hr(),
+
+    # Histogram
     dcc.Graph(id='size_distr_graph'),
     html.Hr(),
+
+    # Images
     html.Div([
+        # Labeled Prediction Image
         html.Div(
             children=[
                 html.H2(children='Segments', style={'textAlign': 'center'}),
-                dcc.Graph(
-                    id='labeled_pred',
-                    style={'justify-content': 'center'}
-                ),
                 html.P(
                     children="""
-                    If the above image does not provide a satisfactory
+                    If the below image does not provide a satisfactory
                     segmentation of the uploaded image, you can click
                     on different segments to remove them from the image
-                    and size distribution histogram above.
+                    and size distribution histogram below.
                     """,
                     style={'margin-left': 150, 'margin-right': 150}
+                ),
+                html.Div(
+                    children=[
+                        html.Img(
+                            id='labeled_pred',
+                            style={
+                                'position': 'absolute',
+                                'top': 32,
+                                'left': 0,
+                                'height': 566,
+                                'width': 768
+                            }
+                        ),
+                        background_scatter_plot_for_clickdata()
+                    ],
+                    style={'position': 'relative'}
                 )
             ],
             className='six columns'
         ),
+        # Original Image and Overlay
         html.Div(
             id='output-images',
             className='six columns'
         )
     ]),
 
+    # Hidden Divs containing json data
     html.Div(id='pred_json', style={'display': 'none'}),
     html.Div(id='size_distr_json', style={'display': 'none'})
 
 ])
 
 
-def b64_2_numpy(string):
-    decoded = base64.b64decode(string)
-    im = Image.open(io.BytesIO(decoded))
-    return np.array(im)
+@dash_app.callback(
+    Output('pred_json', 'children'),
+    [Input('upload-image', 'contents')]
+)
+def get_prediction(contents):
+    """
+    Gets image segmentation prediction of uploaded
+    image using trained model.
+    """
+    response = requests.post(
+        'http://localhost:5000/api/predict',
+        json={'contents': contents}
+    )
+    response = response.text
+    return response
 
 
-def numpy_2_b64(arr, enc_format='png'):
-    img_pil = Image.fromarray(arr)
-    buff = io.BytesIO()
-    img_pil.save(buff, format=enc_format)
-    return base64.b64encode(buff.getvalue()).decode("utf-8")
+@dash_app.callback(
+    Output('size_distr_json', 'children'),
+    [Input('pred_json', 'children'),
+     Input('scatterclick', 'clickData')],
+    [State('size_distr_json', 'children')]
+)
+def get_size_distr(pred_json, click, size_distr_json):
+    """
+    Obtains size distribution of particles in image
+    by assigning unique values to the connected
+    regions of the predicted segment mask.
+    """
+    # determine most recent callback
+    ctx = dash.callback_context
+
+    # if a new image has been uploaded, call orig_size_distr route in flask_api
+    if ctx.triggered[-1]['prop_id'] == 'pred_json.children':
+        response = requests.post(
+            'http://localhost:5000/api/orig_size_distr',
+            json={
+                'data_pred': pred_json
+                }
+            )
+        response = response.text
+        return response
+
+    # otherwise the callback should only be triggered by clicking on the
+    # image/background scatter plot. Then call clicked_size_distr route
+    # in flask api
+    else:
+        response = requests.post(
+            'http://localhost:5000/api/clicked_size_distr',
+            json={
+                'data_pred': pred_json,
+                'click': click,
+                'size_distr_json': size_distr_json
+                }
+            )
+        response = response.text
+        return response
 
 
 @dash_app.callback(
@@ -115,6 +221,11 @@ def numpy_2_b64(arr, enc_format='png'):
     [Input('instruction_button', 'n_clicks')]
 )
 def show_instructions(n_clicks):
+    """
+    Shows a paragraph containing a description and
+    instructions for how to use the app. Clicking
+    on the input button again will hide the paragraph.
+    """
     if n_clicks is None or n_clicks % 2 == 0:
         return ''
     else:
@@ -139,133 +250,8 @@ def show_instructions(n_clicks):
     [Input('upload-image', 'filename')]
 )
 def display_filename(filename):
+    """Displays name of uploaded file"""
     return filename
-
-
-@dash_app.callback(
-    Output('pred_json', 'children'),
-    [Input('upload-image', 'contents')]
-)
-def get_prediction(contents):
-    # convert b64 encoded string to numpy array
-    content_type, content_string = contents.split(',')
-    im = b64_2_numpy(content_string)
-
-    print('Making Prediction')
-    # perform data transformation
-    if len(im.shape) == 2:
-        im = td.make_3channel(im)
-    img = td.resize(im, (192, 256))
-    img = td.fastai_image(img)
-
-    # make prediction
-    prediction = pred.predict_segment(learn, img).numpy()
-    prediction = prediction[0]
-    print('Finished Prediction')
-
-    encoded_pred = np.uint8(255*prediction)
-    encoded_pred = content_type + ',' + numpy_2_b64(encoded_pred)
-    start = time.time()
-    pred_json = json.dumps({
-        'content_type': content_type,
-        'ximage_b64': contents,
-        'ximage_list': im.tolist(),
-        'yimage_b64': encoded_pred,
-        'yimage_list': prediction.tolist()
-    })
-    print('pred_json = ', time.time()-start)
-    return pred_json
-
-
-@dash_app.callback(
-    Output('size_distr_json', 'children'),
-    [Input('pred_json', 'children'),
-     Input('labeled_pred', 'clickData')],
-    [State('size_distr_json', 'children')]
-)
-def get_size_distr(pred_json, click, size_distr_json):
-    data_pred = json.loads(pred_json)
-    start = time.time()
-    if (
-        (size_distr_json is None)
-        or (
-            data_pred['ximage_list']
-            != json.loads(size_distr_json)['ximage_list']
-        )
-    ):
-        # load predictions
-        pred_data = np.asarray(data_pred['yimage_list'], dtype=np.uint8)
-
-        # get size distributions
-        labeled, unique, size_distr = pred.get_size_distr(pred_data)
-        # color predictions
-        flattened_colors = np.linspace(
-            0,
-            256 ** 3 - 1,
-            num=len(unique) + 1,
-            dtype=np.int64
-        )
-        colors = np.zeros((len(unique) + 1, 3), dtype=np.uint8)
-
-        for i in range(len(colors)):
-            colors[i] = np.array([
-                (flattened_colors[i] // (256 ** 2)) % 256,
-                (flattened_colors[i] // (256)) % 256,
-                flattened_colors[i] % 256
-            ])
-
-        lookup = np.zeros((len(unique) + 1, 3), dtype=np.uint8)
-        lookup[np.unique(labeled - 1)] = colors
-        rgb = lookup[labeled - 1]
-
-        encoded_rgb = data_pred['content_type'] + ',' + numpy_2_b64(rgb)
-
-        sd_json = json.dumps({
-            'content_type': data_pred['content_type'],
-            'ximage_list': data_pred['ximage_list'],
-            'rgb_pred_b64': encoded_rgb,
-            'rgb_pred_list': rgb.tolist(),
-            'labeled_list': labeled.tolist(),
-            'unique_list': unique.tolist(),
-            'size_distr_list': size_distr.tolist()
-        })
-        print('size_distr_json = ', time.time()-start)
-        return sd_json
-
-    else:
-        data_size_distr = json.loads(size_distr_json)
-        rgb = np.asarray(data_size_distr['rgb_pred_list'], dtype=np.uint8)
-        labeled = data_size_distr['labeled_list']
-        unique = np.asarray(data_size_distr['unique_list'])
-        size_distr = np.asarray(data_size_distr['size_distr_list'])
-
-        # remove clicked segments
-        if click is not None:
-            xclick, yclick = click['points'][0]['x'], click['points'][0]['y']
-            remove = np.where(unique == labeled[191 - yclick][xclick])[0]
-            unique = np.delete(unique, remove)
-            size_distr = np.delete(size_distr, remove)
-            click_r, click_g, click_b = rgb[191 - yclick, xclick, :]
-            mask = (
-                (rgb[:, :, 0] == click_r)
-                & (rgb[:, :, 1] == click_g)
-                & (rgb[:, :, 2] == click_b)
-            )
-            rgb[mask] = [0, 0, 0]
-
-        encoded_rgb = data_pred['content_type'] + ',' + numpy_2_b64(rgb)
-
-        sd_json = json.dumps({
-            'content_type': data_pred['content_type'],
-            'ximage_list': data_pred['ximage_list'],
-            'rgb_pred_b64': encoded_rgb,
-            'rgb_pred_list': rgb.tolist(),
-            'labeled_list': labeled,
-            'unique_list': unique.tolist(),
-            'size_distr_list': size_distr.tolist()
-        })
-        print('size_distr_json = ', time.time()-start)
-        return sd_json
 
 
 @dash_app.callback(
@@ -273,9 +259,11 @@ def get_size_distr(pred_json, click, size_distr_json):
     [Input('pred_json', 'children')]
 )
 def upload_images(pred_json):
+    """Displays uploaded image and an overlay with the prediction"""
     data = json.loads(pred_json)
 
     return html.Div([
+        # Original Image
         html.Div(
             children=[
                 html.H2(
@@ -285,8 +273,6 @@ def upload_images(pred_json):
                 html.Img(
                     src=data['ximage_b64'],
                     style={
-                        'margin-top': 0,
-                        'margin-bot': 0,
                         'height': '50%',
                         'width': '50%'
                     }
@@ -294,6 +280,8 @@ def upload_images(pred_json):
             ],
             style={'textAlign': 'left'}
         ),
+
+        # Overlay with prediction
         html.Div(
             children=[
                 html.H2(
@@ -330,53 +318,13 @@ def upload_images(pred_json):
 
 
 @dash_app.callback(
-    Output('labeled_pred', 'figure'),
+    Output('labeled_pred', 'src'),
     [Input('size_distr_json', 'children')]
 )
 def show_labeled_pred(size_distr_json):
+    """Displays labeled prediction image"""
     data = json.loads(size_distr_json)
-    return {
-        'data': [go.Scattergl(
-            x=[i for j in range(192) for i in range(256)],
-            y=[j for j in range(192) for i in range(256)],
-            mode='markers',
-            marker_opacity=0
-        )],
-        'layout': {
-            'margin': {
-                'r': 0,
-                't': 0,
-                'b': 10
-            },
-            'xaxis': {
-                'range': [0, 255],
-                'showgrid': False,
-                'showticklabels': False,
-                'zeroline': False
-            },
-            'yaxis': {
-                'showgrid': False,
-                'showticklabels': False,
-                'zeroline': False
-            },
-            'images': [{
-                'range': [0, 191],
-                'xref': 'x',
-                'yref': 'y',
-                'x': 0,
-                'y': 192,
-                'sizex': 256,
-                'sizey': 192,
-                'sizing': 'stretch',
-                'layer': 'below',
-                'source': data['rgb_pred_b64']
-            }],
-            'clickmode': 'event',
-            'hovermode': 'closest',
-            'height': 566,
-            'width': 768
-        }
-    }
+    return data['rgb_pred_b64']
 
 
 @dash_app.callback(
@@ -384,6 +332,7 @@ def show_labeled_pred(size_distr_json):
     [Input('size_distr_json', 'children')]
 )
 def update_hist(size_distr_json):
+    """Displays histogram of size distribution"""
     data = json.loads(size_distr_json)
     size_distr = np.asarray(data['size_distr_list'])
     return {
