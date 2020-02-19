@@ -32,4 +32,3 @@ def test_weight_decay():
 
 def test_save_model():
     assert isinstance(cf.SAVE_MODEL, str)
-
