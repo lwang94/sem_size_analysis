@@ -1,7 +1,5 @@
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
 
@@ -121,7 +119,10 @@ def app_layout():
             # Labeled Prediction Image
             html.Div(
                 children=[
-                    html.H2(children='Segments', style={'textAlign': 'center'}),
+                    html.H2(
+                        children='Segments',
+                        style={'textAlign': 'center'}
+                    ),
                     html.P(
                         children="""
                         If the below image does not provide a satisfactory

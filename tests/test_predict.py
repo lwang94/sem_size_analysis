@@ -1,6 +1,5 @@
 import matplotlib.image as mpimg
 from fastai.vision import Learner
-import gdown
 
 from ..src import predict
 from ..src.transform_data import resize, fastai_image
@@ -19,6 +18,7 @@ def learn():
 
 def test_load_learn(learn):
     assert isinstance(learn, Learner)
+
 
 def test_predict_segment(learn):
     """

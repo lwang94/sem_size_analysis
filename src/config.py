@@ -21,5 +21,3 @@ WEIGHT_DECAY = 1e-1
 
 SAVE_MODEL = 'stage-2_bs16'
 PATH_TO_TESTING = Path('data') / 'dataset' / 'good' / 'testing'
-
-

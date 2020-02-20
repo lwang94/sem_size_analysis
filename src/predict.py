@@ -2,8 +2,10 @@ import numpy as np
 from skimage import measure
 from . import config as cf
 from pathlib import Path
+import gdown
 
 from fastai.vision import load_learner
+
 
 def load_learn(path=Path(__file__).parents[1], model=cf.MODEL):
     """
@@ -18,6 +20,7 @@ def load_learn(path=Path(__file__).parents[1], model=cf.MODEL):
         gdown.download(url, model, quiet=False)
         learn = load_learner(Path(__file__).parents[1], model)
     return learn
+
 
 def predict_segment(learner, img):
     """
