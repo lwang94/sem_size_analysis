@@ -1,5 +1,5 @@
 import matplotlib.image as mpimg
-from fastai.vision import load_learner
+from fastai.vision import Learner
 import gdown
 
 from ..src import predict
@@ -8,27 +8,24 @@ from ..src.transform_data import resize, fastai_image
 from pathlib import Path
 import numpy as np
 
+import pytest
 
-def test_predict_segment():
+
+@pytest.fixture
+def learn():
+    learn = predict.load_learn()
+    return learn
+
+
+def test_load_learn(learn):
+    assert isinstance(learn, Learner)
+
+def test_predict_segment(learn):
     """
     Tests predict_segment function in predict
     by asserting the output shape and its unique
     values.
     """
-    # load model
-    try:
-        model_path = Path(__file__).parents[1]
-        learn = load_learner(model_path, 'stage-2_bs16.pkl')
-    except IOError:
-        url = (
-            'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
-        )
-        output = 'stage-2_bs16.pkl'
-        gdown.download(url, output, quiet=False)
-
-        model_path = Path(__file__).parents[1]
-        learn = load_learner(model_path, output)
-
     # load test image
     img_path = (
         Path(__file__).parent

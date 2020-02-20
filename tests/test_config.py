@@ -2,6 +2,18 @@ from ..src import config as cf
 import numpy as np
 
 
+def test_model():
+    assert isinstance(cf.MODEL, str)
+
+
+def test_url():
+    assert isinstance(cf.URL, str)
+
+
+def test_version():
+    assert isinstance(cf.VERSION, str)
+
+
 def test_codes():
     assert isinstance(cf.CODES, np.ndarray)
 

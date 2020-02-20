@@ -3,13 +3,8 @@ import json
 import numpy as np
 import gdown
 
-from fastai.vision import load_learner
-
 from . import predict as pred
 from . import transform_data as td
-
-# import predict as pred
-# import transform_data as td
 
 import base64
 import io
@@ -21,16 +16,7 @@ host = 'localhost'
 port = '5000'
 
 # load model
-try:
-    model_path = Path(__file__).parents[1]
-    learn = load_learner(model_path, 'stage-2_bs16.pkl')
-except IOError:
-    url = 'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
-    output = 'stage-2_bs16.pkl'
-    gdown.download(url, output, quiet=False)
-
-    model_path = Path(__file__).parents[1]
-    learn = load_learner(model_path, output)
+learn = pred.load_learn()
 
 
 def b64_2_numpy(string):
@@ -46,12 +32,6 @@ def numpy_2_b64(arr, enc_format='png'):
     buff = io.BytesIO()
     img_pil.save(buff, format=enc_format)
     return base64.b64encode(buff.getvalue()).decode("utf-8")
-
-
-@app.route("/")
-def hello():
-    """Homepage"""
-    return "Welcome to the main page!"
 
 
 @app.route('/api/predict', methods=['POST'])

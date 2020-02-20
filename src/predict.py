@@ -1,6 +1,23 @@
 import numpy as np
 from skimage import measure
+from . import config as cf
+from pathlib import Path
 
+from fastai.vision import load_learner
+
+def load_learn(path=Path(__file__).parents[1], model=cf.MODEL):
+    """
+    Returns learner if model file exists in path. If not, download
+    the model file into the root directory and return the learner
+    """
+    filename = path / model
+    if filename.exists():
+        learn = load_learner(path, model)
+    else:
+        url = cf.URL
+        gdown.download(url, model, quiet=False)
+        learn = load_learner(Path(__file__).parents[1], model)
+    return learn
 
 def predict_segment(learner, img):
     """

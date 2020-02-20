@@ -61,12 +61,6 @@ def test_b64_2_numpy(test_img):
     assert isinstance(arr, np.ndarray)
 
 
-def test_home(client):
-    """Tests the api can initially run"""
-    rv = client.get('/')
-    assert b"Welcome to the main page!" in rv.data
-
-
 def test_predict(client, test_img):
     """
     Tests predict function in flask_api by
