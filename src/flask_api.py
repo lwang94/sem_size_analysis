@@ -14,7 +14,7 @@ host = 'localhost'
 port = '5000'
 
 # load model
-learn = pred.load_learn()
+learn = pred.fetch_learner()
 
 
 def b64_2_numpy(string):

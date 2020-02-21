@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 
 MODEL = 'stage-2_bs16.pkl'
-URL = 'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
+MODEL_URL = 'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
 
 VERSION = '0.1'
 

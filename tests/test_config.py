@@ -6,8 +6,8 @@ def test_model():
     assert isinstance(cf.MODEL, str)
 
 
-def test_url():
-    assert isinstance(cf.URL, str)
+def test_model_url():
+    assert isinstance(cf.MODEL_URL, str)
 
 
 def test_version():

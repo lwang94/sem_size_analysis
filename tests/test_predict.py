@@ -12,11 +12,11 @@ import pytest
 
 @pytest.fixture
 def learn():
-    learn = predict.load_learn()
+    learn = predict.fetch_learner()
     return learn
 
 
-def test_load_learn(learn):
+def test_fetch_learner(learn):
     assert isinstance(learn, Learner)
 
 

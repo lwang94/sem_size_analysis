@@ -2,23 +2,19 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 
+from pathlib import Path
+
 
 def instructions():
     """Instructions for using app"""
-    return """
-    SAEMI is a tool for obtaining a Size Analysis of particles
-    in Electron Microscopy Images. To obtain a size analysis,
-    first upload an Electron Microscopy image using the Upload
-    button below. The tool will then predict how to segment the
-    particles from the background using a model trained through
-    deep learning. After segmentation, the tool will label each
-    separate segment and count each segment's number of pixels.
-    This size distribution is then displayed in a histogram which
-    can be used to determine properties such as the mean size,
-    median size or standard deviation of sizes in the image.
-    Thank you for considering using this tool and any additional
-    feedback is always welcome. Good luck!
-    """
+    path_instructions = (
+        Path(__file__).parents[1]
+        / 'docs'
+        / 'instructions.txt'
+    )
+    with open(path_instructions, 'r') as instruction_file:
+        text = instruction_file.read()
+    return text
 
 
 def background_scatter_plot_for_clickdata():

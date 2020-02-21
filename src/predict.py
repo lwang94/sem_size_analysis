@@ -7,7 +7,7 @@ import gdown
 from fastai.vision import load_learner
 
 
-def load_learn(path=Path(__file__).parents[1], model=cf.MODEL):
+def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     """
     Returns learner if model file exists in path. If not, download
     the model file into the root directory and return the learner
@@ -16,7 +16,7 @@ def load_learn(path=Path(__file__).parents[1], model=cf.MODEL):
     if filename.exists():
         learn = load_learner(path, model)
     else:
-        url = cf.URL
+        url = cf.MODEL_URL
         gdown.download(url, model, quiet=False)
         learn = load_learner(Path(__file__).parents[1], model)
     return learn
