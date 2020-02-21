@@ -5,15 +5,15 @@ import plotly.graph_objs as go
 from pathlib import Path
 
 
-def instructions():
+def open_txt_doc(filename):
     """Instructions for using app"""
-    path_instructions = (
+    path = (
         Path(__file__).parents[1]
         / 'docs'
-        / 'instructions.txt'
+        / filename
     )
-    with open(path_instructions, 'r') as instruction_file:
-        text = instruction_file.read()
+    with open(path, 'r') as txtfile:
+        text = txtfile.read()
     return text
 
 
@@ -124,7 +124,7 @@ def app_layout():
                         If the below image does not provide a satisfactory
                         segmentation of the uploaded image, you can click
                         on different segments to remove them from the image
-                        and size distribution histogram below.
+                        and size distribution histogram.
                         """,
                         style={'margin-left': 150, 'margin-right': 150}
                     ),

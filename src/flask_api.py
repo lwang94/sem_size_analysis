@@ -53,10 +53,13 @@ def predict():
     prediction = pred.predict_segment(learn, img).numpy()[0]
 
     # convert prediction array to base64 image and dump relevant data to json
-    encoded_pred = content_type + ',' + numpy_2_b64(np.uint8(255*prediction))
+    lookup = np.asarray([[45, 0, 78], [153, 153, 0]], dtype=np.uint8)
+    prediction3 = lookup[prediction]
+    encoded_pred = content_type + ',' + numpy_2_b64(prediction3)
     return json.dumps({
             'content_type': content_type,
             'ximage_b64': content,
+            'ximage_list': im.tolist(),
             'yimage_b64': encoded_pred,
             'yimage_list': prediction.tolist()
     })
@@ -77,6 +80,15 @@ def orig_size_distr():
     pred_data = np.asarray(data_pred['yimage_list'], dtype=np.uint8)
     labeled, unique, size_distr = pred.get_size_distr(pred_data)
 
+    # rescale size_distr back to original image sizes
+    ximage = np.asarray(data_pred['ximage_list'])
+    yimage = np.asarray(data_pred['yimage_list'])
+    rf = (
+        ximage.shape[0] * ximage.shape[1]
+        / (yimage.shape[0] * yimage.shape[1])
+    )
+    size_distr = size_distr * rf
+
     # create 1D array mapping unique value to a unique color in decimal
     flattened_color_arr = np.linspace(
         0,
@@ -85,9 +97,8 @@ def orig_size_distr():
         dtype=np.int64
     )
 
-    # represent values in flattened_color_arr as three digit
-    # number with base 256 to create a color array with shape
-    # (num unique values including background, 3)
+    # represent values in flattened_color_arr as three digit number with base 256
+    # to create a color array with shape (num unique values including background, 3)
     colors = np.zeros((len(unique) + 1, 3), dtype=np.uint8)
     for i in range(len(colors)):
         colors[i] = np.array([

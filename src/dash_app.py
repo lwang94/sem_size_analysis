@@ -86,7 +86,7 @@ def show_instructions(n_clicks):
     if n_clicks is None or n_clicks % 2 == 0:
         return ''
     else:
-        return dl.instructions()
+        return dl.open_txt_doc('instructions.txt')
 
 
 @dash_app.callback(
@@ -105,53 +105,107 @@ def display_filename(filename):
 def upload_images(pred_json):
     """Displays uploaded image and an overlay with the prediction"""
     data = json.loads(pred_json)
+    ximage = np.asarray(data['ximage_list'])
+    yimage = np.asarray(data['yimage_list'])
+    rf = (
+        ximage.shape[0] * ximage.shape[1]
+        / (yimage.shape[0] * yimage.shape[1])
+    )
 
     return html.Div([
+        # Overlay with prediction
+        html.Div(
+            children=[
+                html.H2(children='Overlay of Original with Segments'),
+                html.Div([
+                    html.Div(
+                        html.Div(
+                            children=[
+                                html.Img(
+                                    src=data['ximage_b64'],
+                                    style={
+                                        'height': '50%',
+                                        'width': '100%'
+                                    }
+                                ),
+                                html.Img(
+                                    src=data['yimage_b64'],
+                                    style={
+                                        'position': 'absolute',
+                                        'top': 0,
+                                        'left': 0,
+                                        'opacity': 0.5,
+                                        'height': '98%',
+                                        'width': '100%'
+                                    }
+                                )
+                            ],
+                            style={'position': 'relative'}
+                        ),
+                        style={
+                            'width': '50%',
+                            'display': 'inline-block'}
+                    ),
+                    html.Div(
+                        html.Pre(
+                            f"""Size: {yimage.shape[0]}x{yimage.shape[1]} pixels
+                            \n{dl.open_txt_doc('resize_note.txt')}
+                            """,
+                            style={
+                                'fontSize': 14,
+                                'margin-left': 5,
+                                'margin-top': 0,
+                                'color': 'red'
+                            }
+                        ),
+                        style={
+                            'width': '50%',
+                            'display': 'inline-block',
+                            'vertical-align': 'top'}
+                    )
+                ])
+            ],
+            style={'textAlign': 'left'}
+        ),
         # Original Image
         html.Div(
             children=[
                 html.H2(children='Original Image'),
-                html.Img(
-                    src=data['ximage_b64'],
-                    style={
-                        'height': '50%',
-                        'width': '50%'
-                    }
-                )
-            ],
-            style={'textAlign': 'left'}
-        ),
-
-        # Overlay with prediction
-        html.Div(
-            children=[
-                html.H2(children='Overlay of Segments with Original'),
-                html.Div(
-                    children=[
+                html.Div([
+                    html.Div(
                         html.Img(
                             src=data['ximage_b64'],
                             style={
                                 'height': '50%',
-                                'width': '50%'
+                                'width': '100%'
                             }
                         ),
-                        html.Img(
-                            src=data['yimage_b64'],
+                        style={
+                            'width': '50%',
+                            'display': 'inline-block'}
+                    ),
+                    html.Div(
+                        html.Pre(
+                            f"""Size: {ximage.shape[0]}x{ximage.shape[1]} pixels
+                            \nRescaling Factor: {rf:.2E}
+                            \nMean pixel value: {ximage.mean():.2E}
+                            """,
                             style={
-                                'position': 'absolute',
-                                'top': 0,
-                                'left': 0,
-                                'opacity': 0.5,
-                                'height': '98%',
-                                'width': '50%'
+                                'fontSize': 14,
+                                'margin-left': 5,
+                                'margin-top': 0,
+                                'color': 'red'
                             }
-                        )
-                    ],
-                    style={'position': 'relative'}
-                )
+                        ),
+                        style={
+                            'width': '50%',
+                            'display': 'inline-block',
+                            'vertical-align': 'top'}
+                    )
+                ])
             ],
             style={'textAlign': 'left'}
-        ),
+        )
     ])
 
 
@@ -184,7 +238,10 @@ def update_hist(size_distr_json):
                 'font': {'size': 28}
             },
             xaxis={'title': 'Size (pixels)'},
-            yaxis={'title': 'Count'},
+            yaxis={
+                'title': 'Count',
+                'tickformat': ',d'
+            },
             annotations=[
                 go.layout.Annotation(
                     text=(
