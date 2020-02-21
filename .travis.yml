@@ -1,10 +1,8 @@
 language: python
 python:
- - '3.8'
+ - '3.6'
 install:
  - pip install -r requirements.txt
 script:
  - pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/
  - flake8
-after_sucess:
- - codecov
