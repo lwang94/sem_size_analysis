@@ -97,8 +97,9 @@ def orig_size_distr():
         dtype=np.int64
     )
 
-    # represent values in flattened_color_arr as three digit number with base 256
-    # to create a color array with shape (num unique values including background, 3)
+    # represent values in flattened_color_arr as three digit number with
+    # base 256 to create a color array with shape
+    # (num unique values including background, 3)
     colors = np.zeros((len(unique) + 1, 3), dtype=np.uint8)
     for i in range(len(colors)):
         colors[i] = np.array([

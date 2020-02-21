@@ -90,6 +90,7 @@ def test_orig_size_distr(client, test_img, test_arr):
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
                 'ximage_b64': test_img,
+                'ximage_list': test_arr.tolist(),
                 'yimage_b64': test_img,
                 'yimage_list': test_arr[:, :, 0].tolist()
             })
