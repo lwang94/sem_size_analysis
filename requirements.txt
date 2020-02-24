@@ -78,6 +78,7 @@ spacy==2.2.3
 srsly==1.0.1
 thinc==7.3.1
 toolz==0.10.0
+--find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.4.0+cpu
 torchvision==0.5.0+cpu
 tornado==6.0.3
