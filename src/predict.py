@@ -18,7 +18,7 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     else:
         url = cf.MODEL_URL
         gdown.download(url, model, quiet=False)
-        learn = load_learner(Path(__file__).parents[1], model)
+        learn = load_learner(path, model)
     return learn
 
 

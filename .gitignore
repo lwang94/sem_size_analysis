@@ -4,3 +4,4 @@ data/*
 .ipynb_checkpoints/*
 experiments/.ipynb_checkpoints
 stage-2_bs16.pkl
+stage-2_fa2.pkl
