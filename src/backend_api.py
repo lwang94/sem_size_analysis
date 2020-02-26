@@ -11,7 +11,7 @@ import io
 from PIL import Image
 
 flask_app = Flask(__name__)
-host = '0.0.0.0'
+host = cf.HOST
 port = cf.PORT
 
 # load model
