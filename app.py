@@ -16,6 +16,7 @@ dash_app = dash.Dash(
     __name__,
     external_stylesheets=external_stylesheets
 )
+server = dash_app.server
 
 
 # dashboard layout
