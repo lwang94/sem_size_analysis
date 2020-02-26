@@ -7,6 +7,7 @@ def list_reqs(fname='requirements.txt'):
     with open(fname) as fd:
         return fd.read().splitlines()
 
+
 setup(
     name='saemi',
     version=cf.VERSION,
