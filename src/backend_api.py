@@ -9,7 +9,7 @@ import base64
 import io
 from PIL import Image
 
-app = Flask(__name__)
+flask_app = Flask(__name__)
 host = 'localhost'
 port = '5000'
 
@@ -32,7 +32,7 @@ def numpy_2_b64(arr, enc_format='png'):
     return base64.b64encode(buff.getvalue()).decode("utf-8")
 
 
-@app.route('/api/predict', methods=['POST'])
+@flask_app.route('/api/predict', methods=['POST'])
 def predict():
     """Obtains image segmentation prediction on image"""
     # get base64 image from requested json
@@ -65,7 +65,7 @@ def predict():
     })
 
 
-@app.route('/api/orig_size_distr', methods=['POST'])
+@flask_app.route('/api/orig_size_distr', methods=['POST'])
 def orig_size_distr():
     """
     Obtains size distribution of image without user input. Also
@@ -126,7 +126,7 @@ def orig_size_distr():
     })
 
 
-@app.route('/api/clicked_size_distr', methods=['POST'])
+@flask_app.route('/api/clicked_size_distr', methods=['POST'])
 def clicked_size_distr():
     """
     Obtains size distribution of image after user has clicked on
@@ -174,4 +174,4 @@ def clicked_size_distr():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host=host, port=port)
+    flask_app.run(debug=True, host=host, port=port)

@@ -7,7 +7,7 @@ import json
 import requests
 import numpy as np
 
-from . import dash_layout as dl
+import app_layout as al
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -19,7 +19,7 @@ dash_app = dash.Dash(
 
 
 # dashboard layout
-dash_app.layout = dl.app_layout()
+dash_app.layout = al.app_layout()
 
 
 @dash_app.callback(
@@ -86,7 +86,7 @@ def show_instructions(n_clicks):
     if n_clicks is None or n_clicks % 2 == 0:
         return ''
     else:
-        return dl.open_txt_doc('instructions.txt')
+        return al.open_txt_doc('instructions.txt')
 
 
 @dash_app.callback(
@@ -149,7 +149,7 @@ def upload_images(pred_json):
                     html.Div(
                         html.Pre(
                             f"""Size: {yimage.shape[0]}x{yimage.shape[1]} pixels
-                            \n{dl.open_txt_doc('resize_note.txt')}
+                            \n{al.open_txt_doc('resize_note.txt')}
                             """,
                             style={
                                 'fontSize': 14,

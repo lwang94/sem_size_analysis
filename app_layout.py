@@ -6,9 +6,9 @@ from pathlib import Path
 
 
 def open_txt_doc(filename):
-    """Instructions for using app"""
+    """Opens texts in docs folder that go in front end of app"""
     path = (
-        Path(__file__).parents[1]
+        Path(__file__).parent
         / 'docs'
         / filename
     )

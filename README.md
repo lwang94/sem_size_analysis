@@ -9,9 +9,31 @@ important information such as mean particle size, median particle size etc. This
 environmental effects on chemical systems, ensure quality control for routine synthesis and much more. 
 
 
-### Requirements:
----------------
+## Installation:
+----------------
+### Dependencies
+saemi requires:
+- Python == 3.6
+- fastai == 1.0.6.0
+- scikit-image == 0.16.2
+- dash == 1.8.0
+- gdown == 3.10.1
+
+### User installation
+To pip install saemi, run:
+    pip install git+git://github.com/lwang94/sem_size_analysis
 
 
+## To Run:
+----------------
+To open the app first cd to the root directory and run in the command shell
+    python -m src.backend_api
+The above will open the backend api server on localhost:5000. To interact via a front-end UI, run in a different command shell
+    python -m app
+You should see an output that looks like this.
+    Running on http://127.0.0.1:8050/ (Press CTRL+C to quit)
+Simply copy and paste the http server id into a local browser and press Enter.
 
-### To start a new project, run:
+### To run tests
+With coverage:
+    pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/

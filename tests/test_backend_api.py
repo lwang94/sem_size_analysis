@@ -1,6 +1,6 @@
 import pytest
 
-from ..src import flask_api as fa
+from ..src import backend_api as ba
 
 import matplotlib.image as mpimg
 import numpy as np
@@ -11,9 +11,9 @@ from pathlib import Path
 @pytest.fixture
 def client():
     """Create client for testing"""
-    fa.app.config['TESTING'] = True
+    ba.flask_app.config['TESTING'] = True
 
-    with fa.app.test_client() as client:
+    with ba.flask_app.test_client() as client:
         yield client
 
 
@@ -28,7 +28,7 @@ def test_img():
     )
     img = mpimg.imread(img_path)
 
-    return 'data:image/jpg;base64,' + fa.numpy_2_b64(img)
+    return 'data:image/jpg;base64,' + ba.numpy_2_b64(img)
 
 
 @pytest.fixture
@@ -57,7 +57,7 @@ def test_b64_2_numpy(test_img):
     Tests b64_2_numpy function in flask_api by
     asserting the output is a numpy array
     """
-    arr = fa.b64_2_numpy(test_img.split(',')[1])
+    arr = ba.b64_2_numpy(test_img.split(',')[1])
     assert isinstance(arr, np.ndarray)
 
 
