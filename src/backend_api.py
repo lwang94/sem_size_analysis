@@ -4,14 +4,15 @@ import numpy as np
 
 from . import predict as pred
 from . import transform_data as td
+from . import config as cf
 
 import base64
 import io
 from PIL import Image
 
 flask_app = Flask(__name__)
-host = 'localhost'
-port = '5000'
+host = '0.0.0.0'
+port = cf.PORT
 
 # load model
 learn = pred.fetch_learner()

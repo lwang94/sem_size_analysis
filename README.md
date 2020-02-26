@@ -40,7 +40,7 @@ You should see an output that looks like this.
 ```
 Running on http://127.0.0.1:8050/ (Press CTRL+C to quit)
 ```
-Simply copy and paste the http server id into a local browser and press Enter.
+Simply copy and paste the http address into a local browser and press Enter.
 
 ### To run tests
 With coverage:

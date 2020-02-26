@@ -8,6 +8,7 @@ import requests
 import numpy as np
 
 import app_layout as al
+from src import config as cf
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -17,6 +18,7 @@ dash_app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 server = dash_app.server
+backend_url = f'http://0.0.0.0:{cf.PORT}'
 
 
 # dashboard layout
@@ -33,7 +35,7 @@ def get_prediction(contents):
     image using trained model.
     """
     response = requests.post(
-        'http://localhost:5000/api/predict',
+        f'{backend_url}/api/predict',
         json={'contents': contents}
     )
     return response.text
@@ -56,7 +58,7 @@ def get_size_distr(pred_json, click, size_distr_json):
     # if a new image has been uploaded, call orig_size_distr route in flask_api
     if ctx.triggered[-1]['prop_id'] == 'pred_json.children':
         response = requests.post(
-            'http://localhost:5000/api/orig_size_distr',
+            f'{backend_url}/api/orig_size_distr',
             json={'data_pred': pred_json}
             )
         return response.text
@@ -64,7 +66,7 @@ def get_size_distr(pred_json, click, size_distr_json):
     # otherwise, call clicked_size_distr route in flask_api
     else:
         response = requests.post(
-            'http://localhost:5000/api/clicked_size_distr',
+            f'{backend_url}/api/clicked_size_distr',
             json={
                 'data_pred': pred_json,
                 'click': click,
