@@ -2,6 +2,7 @@ FROM python:alpine3.6
 
 RUN apk update
 RUN apk add make automake gcc g++ subversion python3-dev
+RUN apk add --update py-pip
 
 COPY requirements.txt .
 
