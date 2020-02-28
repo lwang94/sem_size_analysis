@@ -46,6 +46,7 @@ more-itertools==8.2.0
 murmurhash==1.0.2
 networkx==2.4
 nvidia-ml-py3==7.352.0
+numpy
 olefile==0.46
 packaging==20.1
 Pillow==7.0.0
