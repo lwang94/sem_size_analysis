@@ -1,6 +1,8 @@
 FROM python:alpine3.6
-COPY . /app
-WORKDIR /app
-RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y git python3-dev gcc \ && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt .
+RUN pip install --upgrade -r requirements.txt
+COPY app app/
+RUN python src/backend_api.py
 EXPOSE 5000
-CMD python ./src/dash_app.py
+CMD ["python", "src/backend_api.py"]

@@ -1,2 +1,9 @@
 experiments/*
 tests/*
+.coveragerc
+.dockerignore
+Dockerfile
+LICENSE
+README.md
+setup.py
+src/training.py
