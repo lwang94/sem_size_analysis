@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y git python3-dev gcc \
 
 RUN pip install --upgrade -r requirements.txt
 
-COPY app app/
+COPY src src/
 
 RUN python src/backend_api.py
 
