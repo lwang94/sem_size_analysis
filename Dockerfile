@@ -4,7 +4,7 @@ RUN apk update
 RUN apk add make automake gcc g++ subversion python3-dev
 RUN apk add --update --no-cache py3-numpy
 ENV PYTHONPATH=/usr/lib/python3.6/site-packages
-RUN apk add --update libgfortran.so.5
+RUN apk add --update libgfortran
 RUN apk add py3-scipy --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
 COPY requirements.txt .
 
