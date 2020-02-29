@@ -3,9 +3,8 @@ FROM python:alpine3.6
 RUN apk update
 RUN apk add make automake gcc g++ subversion python3-dev
 RUN apk add --update --no-cache py3-numpy
-ENV PYTHONPATH=/usr/lib/python3.6/site-packages
-RUN echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
 RUN apk add --update --no-cache py3-scipy
+ENV PYTHONPATH=/usr/lib/python3.6/site-packages
 
 COPY requirements.txt .
 
