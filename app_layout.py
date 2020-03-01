@@ -77,7 +77,7 @@ def app_layout():
         dcc.Upload(
             id='test',
             children=html.Button('Test')
-        )
+        ),
         # Instructions
         html.Div(
             children=[
