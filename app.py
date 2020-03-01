@@ -38,6 +38,7 @@ def get_prediction(contents):
         f'{backend_url}/api/predict',
         json={'contents': contents}
     )
+    print(response.status_code)
     return response.text
 
 
