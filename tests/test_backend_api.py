@@ -67,11 +67,10 @@ def test_predict(client, test_img):
     asserting the output json contains a list
     and string with the correct keys
     """
+    content_json = json.dumps({'contents': test_img})
     res = client.post(
         '/api/predict',
-        json={
-            'contents': test_img
-        }
+        json=content_json
     )
     pred = json.loads(res.data)
     assert isinstance(pred['yimage_list'], list)
