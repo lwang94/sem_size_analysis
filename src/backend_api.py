@@ -35,7 +35,7 @@ def numpy_2_b64(arr, enc_format='png'):
 
 @flask_app.route('/')
 def hello_world():
-   return 'Hello, World!'
+    return 'Hello, World!'
 
 
 @flask_app.route('/api/predict', methods=['POST'])
