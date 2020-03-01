@@ -34,10 +34,10 @@ def get_prediction(contents):
     Gets image segmentation prediction of uploaded
     image using trained model.
     """
-    print(type(contents))
+    content_json = json.dumps({'contents': contents})
     response = requests.post(
         f'{backend_url}/api/predict',
-        json={'contents': contents}
+        json=content_json
     )
     print('POST successful')
     return response.text
