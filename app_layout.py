@@ -73,11 +73,6 @@ def app_layout():
         # Title
         html.H1(children='SAEMI', style={'textAlign': 'center'}),
 
-        # Test
-        dcc.Upload(
-            id='test',
-            children=html.Button('Test')
-        ),
         # Instructions
         html.Div(
             children=[
@@ -160,7 +155,6 @@ def app_layout():
         ]),
 
         # Hidden Divs containing json data
-        html.Div(id='test-div', style={'display': 'none'}),
         html.Div(id='pred_json', style={'display': 'none'}),
         html.Div(id='size_distr_json', style={'display': 'none'})
     ])
