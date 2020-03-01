@@ -26,6 +26,19 @@ dash_app.layout = al.app_layout()
 
 
 @dash_app.callback(
+    Output('test-div', 'children'),
+    [Input('test', 'contents')]
+)
+def test(contents):
+    response = requests(
+        f'{backend_url}/testing',
+        json={'message': 'success!'}
+    )
+    print(response.text)
+    return response.text
+
+
+@dash_app.callback(
     Output('pred_json', 'children'),
     [Input('upload-image', 'contents')]
 )
@@ -38,7 +51,6 @@ def get_prediction(contents):
         f'{backend_url}/api/predict',
         json={'contents': contents}
     )
-    print(response.status_code)
     return response.text
 
 

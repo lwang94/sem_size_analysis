@@ -38,6 +38,13 @@ def hello_world():
     return 'Hello, World!'
 
 
+@flask_app.route('/testing', methods=['POST'])
+def testing():
+    content = request.get_json()
+    message = content['message']
+    return json.dumps({'test': message})
+
+
 @flask_app.route('/api/predict', methods=['POST'])
 def predict():
     """Obtains image segmentation prediction on image"""
