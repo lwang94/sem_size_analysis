@@ -45,11 +45,11 @@ def predict():
     """Obtains image segmentation prediction on image"""
     # get base64 image from requested json
     content = request.get_json()
-    print(content)
 
     # convert base64 image to numpy array
     content_type, content_string = content.split(',')
     im = b64_2_numpy(content_string)
+    print(im)
 
     # perform data transformations
     if len(im.shape) == 2:
