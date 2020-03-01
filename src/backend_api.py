@@ -35,11 +35,13 @@ def numpy_2_b64(arr, enc_format='png'):
 
 @flask_app.route('/')
 def hello_world():
+    print('successful deployment')
     return 'Hello, World!'
 
 
 @flask_app.route('/api/predict', methods=['POST'])
 def predict():
+    print('recieved POST')
     """Obtains image segmentation prediction on image"""
     # get base64 image from requested json
     content = request.get_json()
