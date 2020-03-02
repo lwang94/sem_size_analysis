@@ -1,4 +1,3 @@
-import aiohttp
 import asyncio
 import uvicorn
 
@@ -17,7 +16,11 @@ import io
 from PIL import Image
 
 star_app = Starlette()
-star_app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
+star_app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_headers=['X-Requested-With', 'Content-Type']
+)
 
 
 async def setup_learner():
@@ -51,7 +54,7 @@ async def hello_world():
     return "Hello World!"
 
 
-@star_app.route('/api/predict', methods = ['POST'])
+@star_app.route('/api/predict', methods=['POST'])
 async def predict(request):
     content = await request.json()
     content = content['contents']
