@@ -50,14 +50,13 @@ def predict():
     # convert base64 image to numpy array
     content_type, content_string = content.split(',')
     im = b64_2_numpy(content_string)
-    print(im)
-    print (im['shape'])
+    print(content_type)
     # perform data transformations
     if len(im.shape) == 2:
         im = td.make_3channel(im)
     img = td.resize(im, (192, 256))
     img = td.fastai_image(img)
-
+    print(im['shape'])
     # make prediction
     prediction = pred.predict_segment(learn, img).numpy()[0]
 
