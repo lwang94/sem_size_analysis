@@ -50,7 +50,7 @@ loop.close()
 
 
 @star_app.route('/')
-async def hello_world():
+async def hello_world(request):
     return "Hello World!"
 
 
