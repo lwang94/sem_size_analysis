@@ -8,7 +8,7 @@ import requests
 import numpy as np
 
 import app_layout as al
-# from src import config as cf
+from src import config as cf
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -18,7 +18,7 @@ dash_app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 server = dash_app.server
-backend_url = 'https://saemibackend.onrender.com'
+backend_url = f'http://{cf.HOST}:{cf.PORT}'
 
 
 # dashboard layout
@@ -34,12 +34,10 @@ def get_prediction(contents):
     Gets image segmentation prediction of uploaded
     image using trained model.
     """
-    content_json = json.dumps({'contents': contents})
     response = requests.post(
         f'{backend_url}/api/predict',
-        json=content_json
+        json={'contents':contents}
     )
-    print('POST successful')
     return response.text
 
 

@@ -3,9 +3,6 @@ from skimage import measure
 from . import config as cf
 from pathlib import Path
 
-# import io
-# import boto3
-# import os
 import gdown
 from fastai.vision import load_learner
 
@@ -19,14 +16,6 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     if filename.exists():
         learn = load_learner(path, model)
     else:
-        # client = boto3.client(
-        #     's3',
-        #     aws_access_key_id = os.environ['S3_KEY'],
-        #     aws_secret_access_key= os.environ['S3_SECRET']
-        # )
-        # obj = client.get_object(Bucket='saemi-model', Key='stage-2_bs16.pkl')
-        # model = io.BytesIO(obj["Body"].read())
-
         url = cf.MODEL_URL
         gdown.download(url, model, quiet=False)
         learn = load_learner(path, model)

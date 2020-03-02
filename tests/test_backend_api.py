@@ -61,20 +61,19 @@ def test_b64_2_numpy(test_img):
     assert isinstance(arr, np.ndarray)
 
 
-# def test_predict(client, test_img):
-#     """
-#     Tests predict function in flask_api by
-#     asserting the output json contains a list
-#     and string with the correct keys
-#     """
-#     content_json = json.dumps({'contents': test_img})
-#     res = client.post(
-#         '/api/predict',
-#         json=content_json
-#     )
-#     pred = json.loads(res.data)
-#     assert isinstance(pred['yimage_list'], list)
-#     assert isinstance(pred['yimage_b64'], str)
+def test_predict(client, test_img):
+    """
+    Tests predict function in flask_api by
+    asserting the output json contains a list
+    and string with the correct keys
+    """
+    res = client.post(
+        '/api/predict',
+        json={'contents': test_img}
+    )
+    pred = json.loads(res.data)
+    assert isinstance(pred['yimage_list'], list)
+    assert isinstance(pred['yimage_b64'], str)
 
 
 def test_orig_size_distr(client, test_img, test_arr):
