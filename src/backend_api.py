@@ -51,6 +51,7 @@ def predict():
     content_type, content_string = content.split(',')
     im = b64_2_numpy(content_string)
     print(content_type)
+    print(im['shape'])
     # perform data transformations
     if len(im.shape) == 2:
         im = td.make_3channel(im)
@@ -59,7 +60,7 @@ def predict():
 
     # make prediction
     prediction = pred.predict_segment(learn, img).numpy()[0]
-    print(im['shape'])
+
     # convert prediction array to base64 image and dump relevant data to json
     lookup = np.asarray([[45, 0, 78], [153, 153, 0]], dtype=np.uint8)
     prediction3 = lookup[prediction]
