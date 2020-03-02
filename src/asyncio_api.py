@@ -1,5 +1,5 @@
-import asyncio
-import uvicorn
+# import asyncio
+# import uvicorn
 
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
@@ -9,7 +9,7 @@ import numpy as np
 
 from . import predict as pred
 from . import transform_data as td
-from . import config as cf
+# from . import config as cf
 
 import base64
 import io
