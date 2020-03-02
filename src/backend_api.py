@@ -56,10 +56,10 @@ def predict():
         im = td.make_3channel(im)
     img = td.resize(im, (192, 256))
     img = td.fastai_image(img)
-    print(im['shape'])
+
     # make prediction
     prediction = pred.predict_segment(learn, img).numpy()[0]
-
+    print(im['shape'])
     # convert prediction array to base64 image and dump relevant data to json
     lookup = np.asarray([[45, 0, 78], [153, 153, 0]], dtype=np.uint8)
     prediction3 = lookup[prediction]
