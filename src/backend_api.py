@@ -51,7 +51,7 @@ def predict():
     content_type, content_string = content.split(',')
     im = b64_2_numpy(content_string)
     print(im)
-
+    print (im['shape'])
     # perform data transformations
     if len(im.shape) == 2:
         im = td.make_3channel(im)
