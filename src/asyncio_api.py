@@ -15,6 +15,8 @@ import base64
 import io
 from PIL import Image
 
+learn = pred.fetch_learner()
+
 star_app = Starlette()
 star_app.add_middleware(
     CORSMiddleware,
@@ -23,9 +25,9 @@ star_app.add_middleware(
 )
 
 
-async def setup_learner():
-    learn = pred.fetch_learner()
-    return learn
+# async def setup_learner():
+#     learn = pred.fetch_learner()
+#     return learn
 
 
 async def b64_2_numpy(string):
@@ -43,10 +45,10 @@ async def numpy_2_b64(arr, enc_format='png'):
     return base64.b64encode(buff.getvalue()).decode("utf-8")
 
 
-loop = asyncio.get_event_loop()
-tasks = [asyncio.ensure_future(setup_learner())]
-learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
-loop.close()
+# loop = asyncio.get_event_loop()
+# tasks = [asyncio.ensure_future(setup_learner())]
+# learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
+# loop.close()
 
 
 @star_app.route('/')
@@ -170,5 +172,5 @@ async def clicked_size_distr(request):
     })
 
 
-if __name__ == '__main__':
-    uvicorn.run(app=star_app, host=cf.HOST, port=cf.PORT)
+# if __name__ == '__main__':
+#     uvicorn.run(app=star_app, host=cf.HOST, port=cf.PORT)

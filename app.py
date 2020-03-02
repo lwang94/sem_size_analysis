@@ -19,6 +19,7 @@ dash_app = dash.Dash(
 )
 server = dash_app.server
 backend_url = 'https://saemibackend.onrender.com'
+# backend_url = 'http://127.0.0.1:8000'
 
 
 # dashboard layout
