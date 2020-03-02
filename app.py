@@ -8,7 +8,7 @@ import requests
 import numpy as np
 
 import app_layout as al
-from src import config as cf
+# from src import config as cf
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
