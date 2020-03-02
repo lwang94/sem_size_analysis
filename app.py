@@ -36,7 +36,7 @@ def get_prediction(contents):
     """
     response = requests.post(
         f'{backend_url}/api/predict',
-        json={'contents':contents}
+        json={'contents': contents}
     )
     return response.text
 
