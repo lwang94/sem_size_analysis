@@ -41,7 +41,7 @@ def hello_world():
 
 @flask_app.route('/api/predict', methods=['POST'])
 def predict():
-    print('recieved POST')
+    print(learn.summary)
     """Obtains image segmentation prediction on image"""
     # get base64 image from requested json
     content = request.get_json()
