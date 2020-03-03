@@ -24,7 +24,6 @@ dash-html-components==1.0.2
 dash-renderer==1.2.3
 dash-table==4.6.0
 dask==2.11.0
-dataclasses==0.7
 decorator==4.4.1
 docutils==0.15.2
 entrypoints==0.3
