@@ -8,9 +8,9 @@ from starlette.responses import JSONResponse
 import json
 import numpy as np
 
-from . import predict as pred
-from . import transform_data as td
-from . import config as cf
+import predict as pred
+import transform_data as td
+import config as cf
 
 import base64
 import io
