@@ -1,20 +1,16 @@
-FROM python:alpine3.6
+FROM python:3.6-slim-stretch
 
-RUN apk update
-RUN apk add make automake gcc gfortran g++ subversion python3-dev
-RUN pip install cython
-RUN apk add --update --no-cache py3-numpy
-ENV PYTHONPATH=/usr/lib/python3.6/site-packages
+RUN apt-get update && apt-get install -y git python3-dev gcc \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --upgrade -r requirements.txt
 
 COPY src src/
 
-RUN python src/backend_api.py
+RUN python src/asyncio_api.py
 
 EXPOSE 5000
 
-CMD ["python", "src/backend_api.py"]
+CMD ["python", "src/asyncio_api.py", "serve"]
