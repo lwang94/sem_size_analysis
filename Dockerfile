@@ -13,4 +13,4 @@ RUN python -m src.asyncio_api
 
 EXPOSE 5000
 
-CMD ["python", "src/asyncio_api.py", "serve"]
+CMD ["python -m", "src.asyncio_api", "serve"]
