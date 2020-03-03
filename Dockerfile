@@ -9,7 +9,7 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY src src/
 
-RUN python src/asyncio_api.py
+RUN python -m src.asyncio_api
 
 EXPOSE 5000
 
