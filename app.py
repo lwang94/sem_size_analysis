@@ -8,7 +8,7 @@ import requests
 import numpy as np
 
 import app_layout as al
-# from src import config as cf
+from src import config as cf
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -18,8 +18,8 @@ dash_app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 server = dash_app.server
-backend_url = 'https://saemibackend.onrender.com'
-# backend_url = 'http://127.0.0.1:8000'
+# backend_url = 'https://saemibackend.onrender.com'
+backend_url = f'http://{cf.HOST}:{cf.PORT}'
 
 
 # dashboard layout

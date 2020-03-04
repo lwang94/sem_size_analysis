@@ -7,8 +7,8 @@ from pathlib import Path
 PORT = int(os.environ.get("PORT", 5000))
 HOST = '0.0.0.0'
 
-MODEL = 'stage-2_bs16.pkl'
-MODEL_URL = 'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'
+MODEL = 'fp16_bs16.pkl'
+MODEL_URL = 'https://drive.google.com/uc?id=1akc-dwa9KnP-EiXyG13cWLsJ463iRorN'
 VERSION = '0.1'
 
 PATH_IMG = Path('data') / 'dataset' / 'good' / 'train_x'

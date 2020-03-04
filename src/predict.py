@@ -15,10 +15,12 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     filename = path / model
     if filename.exists():
         learn = load_learner(path, model)
+        learn = learn.to_fp32()
     else:
         url = cf.MODEL_URL
         gdown.download(url, model, quiet=False)
         learn = load_learner(path, model)
+        learn = learn.to_fp32()
     return learn
 
 

@@ -19,7 +19,7 @@ saemi requires:
 - dash == 1.8.0
 - gdown == 3.10.1
 
-### User installation
+### User installation (TO DO)
 To pip install saemi, run:
 ```
 pip install git+git://github.com/lwang94/sem_size_analysis
