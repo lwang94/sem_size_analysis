@@ -18,8 +18,8 @@ dash_app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 server = dash_app.server
-# backend_url = 'https://saemibackend.onrender.com'
-backend_url = f'http://{cf.HOST}:{cf.PORT}'
+backend_url = 'https://saemi-backend.herokuapp.com/'
+# backend_url = f'http://{cf.HOST}:{cf.PORT}'
 
 
 # dashboard layout
