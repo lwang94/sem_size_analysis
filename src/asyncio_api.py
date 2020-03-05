@@ -173,5 +173,4 @@ async def clicked_size_distr(request):
 
 
 if __name__ == '__main__':
-    if 'serve' in sys.argv:
-        uvicorn.run(app=star_app, host=cf.HOST, port=cf.PORT, log_level="info")
+    uvicorn.run(app=star_app, host=cf.HOST, port=cf.PORT, log_level="info")
