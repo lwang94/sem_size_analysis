@@ -42,7 +42,7 @@ def get_prediction(contents, n_clicks):
     Gets image segmentation prediction of uploaded
     image using trained model.
     """
-    ctx=dash.callback_context
+    ctx = dash.callback_context
     if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
         if n_clicks is not None:
             fname = Path(__file__).parent / 'demo_img.jpg'
@@ -50,7 +50,10 @@ def get_prediction(contents, n_clicks):
             img_pil = Image.fromarray(img)
             buff = io.BytesIO()
             img_pil.save(buff, format='jpeg')
-            imgb64 = 'data:image/jpeg;base64,' + base64.b64encode(buff.getvalue()).decode("utf-8")
+            imgb64 = (
+                'data:image/jpeg;base64,'
+                + base64.b64encode(buff.getvalue()).decode("utf-8")
+            )
     else:
         imgb64 = contents
     response = requests.post(
