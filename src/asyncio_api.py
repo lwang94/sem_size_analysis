@@ -1,6 +1,5 @@
 import asyncio
 import uvicorn
-import sys
 
 from starlette.applications import Starlette
 from starlette.middleware.cors import CORSMiddleware
