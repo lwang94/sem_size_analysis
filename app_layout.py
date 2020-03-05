@@ -88,10 +88,24 @@ def app_layout():
             style={'textAlign': 'center'}
         ),
 
-        # Upload file button
-        dcc.Upload(
-            id='upload-image',
-            children=html.Button('Upload File'),
+        # Upload demo or file
+        html.Div(
+            children=[
+                html.Div(
+                    html.Button(
+                        id='demo',
+                        children='Upload Demo'
+                    ),
+                    style={'display': 'inline-block'}
+                ),
+                html.Div(
+                    dcc.Upload(
+                        id='upload-image',
+                        children=html.Button('Upload File'),
+                    ),
+                    style={'display': 'inline-block'}
+                )
+            ],
             style={'display': 'flex', 'justify-content': 'center'}
         ),
 

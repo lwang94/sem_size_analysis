@@ -7,6 +7,12 @@ import json
 import requests
 import numpy as np
 
+import matplotlib.image as mpimg
+from pathlib import Path
+from PIL import Image
+import io
+import base64
+
 import app_layout as al
 # from src import config as cf
 
@@ -28,16 +34,28 @@ dash_app.layout = al.app_layout()
 
 @dash_app.callback(
     Output('pred_json', 'children'),
-    [Input('upload-image', 'contents')]
+    [Input('upload-image', 'contents'),
+     Input('demo', 'n_clicks')]
 )
-def get_prediction(contents):
+def get_prediction(contents, n_clicks):
     """
     Gets image segmentation prediction of uploaded
     image using trained model.
     """
+    ctx=dash.callback_context
+    if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
+        if n_clicks is not None:
+            fname = Path(__file__).parent / 'demo_img.jpg'
+            img = mpimg.imread(fname)
+            img_pil = Image.fromarray(img)
+            buff = io.BytesIO()
+            img_pil.save(buff, format='jpeg')
+            imgb64 = 'data:image/jpeg;base64,' + base64.b64encode(buff.getvalue()).decode("utf-8")
+    else:
+        imgb64 = contents
     response = requests.post(
         f'{backend_url}/api/predict',
-        json={'contents': contents}
+        json={'contents': imgb64}
     )
     return response.text
 
