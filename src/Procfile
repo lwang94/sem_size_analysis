@@ -1,1 +1,1 @@
-web: gunicorn src.asyncio_api:star_app -k uvicorn.worker.UvicornH11Worker
+web: gunicorn src.asyncio_api:star_app -k uvicorn.workers.UvicornWorker
