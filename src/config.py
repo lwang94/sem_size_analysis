@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 
 PORT = int(os.environ.get("PORT", 5000))
-HOST = '0.0.0.0'
+HOST = '.0.0.0.0'
 
 MODEL = 'stage-2_bs16.pkl'
 MODEL_URL = 'https://drive.google.com/uc?id=1ClEUOwFhIOMNxvedps8WQN8Koy6NT5eI'

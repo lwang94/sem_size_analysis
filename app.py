@@ -290,5 +290,18 @@ def update_hist(size_distr_json):
     }
 
 
+@dash_app.callback(
+    Output('download-link', 'href'),
+    [Input('size_distr_json', 'children')]
+)
+def update_download_link(size_distr_json):
+    data = json.loads(size_distr_json)
+    size_distr = np.asarray(data['size_distr_list'])
+    buff = io.StringIO()
+    csv_string = np.savetxt(buff, size_distr, encoding='utf-8')
+    csv_string = 'data:text/csv;charset=utf-8,' + buff.getvalue()
+    return csv_string
+
+
 if __name__ == '__main__':
     dash_app.run_server(debug=True)

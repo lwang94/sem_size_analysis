@@ -94,14 +94,14 @@ def app_layout():
                 html.Div(
                     html.Button(
                         id='demo',
-                        children='Upload Demo'
+                        children='Try the Demo'
                     ),
                     style={'display': 'inline-block'}
                 ),
                 html.Div(
                     dcc.Upload(
                         id='upload-image',
-                        children=html.Button('Upload File'),
+                        children=html.Button('Upload Image'),
                     ),
                     style={'display': 'inline-block'}
                 )
@@ -122,6 +122,14 @@ def app_layout():
 
         # Histogram
         dcc.Graph(id='size_distr_graph'),
+        html.A(
+            'Download Data',
+            id='download-link',
+            download='size_distribution.csv',
+            href='',
+            target='_blank',
+            style={'display': 'flex', 'justify-content': 'center'}
+        ),
         html.Hr(),
 
         # Images
