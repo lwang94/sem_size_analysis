@@ -30,7 +30,7 @@ def test_arr():
     return img
 
 
-def test_predict(client, test_img):
+def test_predict(client, test_arr):
     """
     Tests predict function in flask_api by
     asserting the output json contains a list
@@ -48,7 +48,7 @@ def test_predict(client, test_img):
     assert isinstance(pred['rf'], float)
 
 
-def test_orig_size_distr(client, test_img, test_arr):
+def test_orig_size_distr(client, test_arr):
     """
     Tests orig_size_distr function in flask_api by
     asserting the output json contains lists and strings
@@ -72,7 +72,7 @@ def test_orig_size_distr(client, test_img, test_arr):
     assert isinstance(dat['size_distr_list'], list)
 
 
-def test_clicked_size_distr(client, test_img, test_arr):
+def test_clicked_size_distr(client, test_arr):
     """
     Tests clicked_size_distr function in flask_api by
     asserting the output json contains lists and strings
