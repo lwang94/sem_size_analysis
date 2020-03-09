@@ -1,12 +1,19 @@
 import pytest
 
 from ..src import backend_api as ba
-from ..app import numpy_2_b64
 
 import matplotlib.image as mpimg
 import numpy as np
 import json
 from pathlib import Path
+
+
+def numpy_2_b64(arr, enc_format='png'):
+    """Converts numpy array to base64 encoded image"""
+    img_pil = Image.fromarray(arr)
+    buff = io.BytesIO()
+    img_pil.save(buff, format=enc_format)
+    return base64.b64encode(buff.getvalue()).decode("utf-8")
 
 
 @pytest.fixture
