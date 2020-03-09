@@ -1,5 +1,4 @@
 import dash
-import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
@@ -75,7 +74,7 @@ def get_prediction(contents, n_clicks):
     else:
         imgb64 = contents
 
-    #convert from base64 to numpy array
+    # convert from base64 to numpy array
     content_type, content_string = imgb64.split(',')
     img = b64_2_numpy(content_string)
 
@@ -181,7 +180,7 @@ def display_yimage(pred_json, op_val):
     prediction3 = lookup[data['yimage_list']]
     encoded_pred = data['content_type'] + ',' + numpy_2_b64(prediction3)
 
-    #specify style
+    # specify style
     style = {
         'position': 'absolute',
         'top': 0,

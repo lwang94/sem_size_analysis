@@ -1,6 +1,7 @@
 import pytest
 
 from ..src import backend_api as ba
+from ..app import numpy_2_b64
 
 import matplotlib.image as mpimg
 import numpy as np
@@ -28,7 +29,7 @@ def test_img():
     )
     img = mpimg.imread(img_path)
 
-    return 'data:image/jpg;base64,' + ba.numpy_2_b64(img)
+    return 'data:image/jpg;base64,' + numpy_2_b64(img)
 
 
 @pytest.fixture
@@ -42,23 +43,6 @@ def test_arr():
     )
     img = mpimg.imread(img_path)
     return img
-
-
-def test_numpy_2_b64(test_img):
-    """
-    Tests numpy_2_b64 funcion in flask_api by
-    asserting the output is a string
-    """
-    assert isinstance(test_img, str)
-
-
-def test_b64_2_numpy(test_img):
-    """
-    Tests b64_2_numpy function in flask_api by
-    asserting the output is a numpy array
-    """
-    arr = ba.b64_2_numpy(test_img.split(',')[1])
-    assert isinstance(arr, np.ndarray)
 
 
 def test_predict(client, test_img):

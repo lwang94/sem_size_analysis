@@ -6,10 +6,6 @@ from . import predict as pred
 from . import transform_data as td
 from . import config as cf
 
-import base64
-import io
-from PIL import Image
-
 flask_app = Flask(__name__)
 host = cf.HOST
 port = cf.PORT

@@ -199,7 +199,7 @@ def app_layout():
         ]),
         html.Hr(),
 
-        #Feedback
+        # Feedback
         html.Div(
             children=[
                 html.H2('Your Feedback is Welcome!'),
