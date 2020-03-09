@@ -7,6 +7,10 @@ import numpy as np
 import json
 from pathlib import Path
 
+from PIL import Image
+import io
+import base64
+
 
 def numpy_2_b64(arr, enc_format='png'):
     """Converts numpy array to base64 encoded image"""
