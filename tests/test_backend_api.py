@@ -3,7 +3,6 @@ import pytest
 from ..src import backend_api as ba
 
 import matplotlib.image as mpimg
-import numpy as np
 import json
 from pathlib import Path
 
