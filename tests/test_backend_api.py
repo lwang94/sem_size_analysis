@@ -7,18 +7,6 @@ import numpy as np
 import json
 from pathlib import Path
 
-from PIL import Image
-import io
-import base64
-
-
-def numpy_2_b64(arr, enc_format='png'):
-    """Converts numpy array to base64 encoded image"""
-    img_pil = Image.fromarray(arr)
-    buff = io.BytesIO()
-    img_pil.save(buff, format=enc_format)
-    return base64.b64encode(buff.getvalue()).decode("utf-8")
-
 
 @pytest.fixture
 def client():
@@ -64,11 +52,14 @@ def test_predict(client, test_img):
     """
     res = client.post(
         '/api/predict',
-        json={'contents': test_img}
+        json={
+            'content_type': 'data:image/jpeg;base64',
+            'contents': test_arr.tolist()
+        }
     )
     pred = json.loads(res.data)
     assert isinstance(pred['yimage_list'], list)
-    assert isinstance(pred['yimage_b64'], str)
+    assert isinstance(pred['rf'], float)
 
 
 def test_orig_size_distr(client, test_img, test_arr):
@@ -82,16 +73,13 @@ def test_orig_size_distr(client, test_img, test_arr):
         json={
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'ximage_b64': test_img,
-                'ximage_list': test_arr.tolist(),
-                'yimage_b64': test_img,
+                'rf': 2,
                 'yimage_list': test_arr[:, :, 0].tolist()
             })
         }
     )
     dat = json.loads(res.data)
 
-    assert isinstance(dat['rgb_pred_b64'], str)
     assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)
@@ -110,8 +98,7 @@ def test_clicked_size_distr(client, test_img, test_arr):
         json={
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'ximage_b64': test_img,
-                'yimage_b64': test_img,
+                'rf': 2,
                 'yimage_list': test_arr[:, :, 0].tolist()
             }),
             'click': {
@@ -125,7 +112,6 @@ def test_clicked_size_distr(client, test_img, test_arr):
             },
             'size_distr_json': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'rgb_pred_b64': test_img,
                 'rgb_pred_list': test_list,
                 'labeled_list': test_arr[:, :, 0].tolist(),
                 'unique_list': [1, 2, 3],
@@ -134,7 +120,6 @@ def test_clicked_size_distr(client, test_img, test_arr):
         }
     )
     dat = json.loads(res.data)
-    assert isinstance(dat['rgb_pred_b64'], str)
     assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)
