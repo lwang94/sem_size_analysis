@@ -18,20 +18,6 @@ def client():
 
 
 @pytest.fixture
-def test_img():
-    """Initialize test image to be used in test functions"""
-    img_path = (
-        Path(__file__).parent
-        / 'images'
-        / 'train_x'
-        / 'L2_0a7efff5757e6b543ee1a0d17328c881.jpg'
-    )
-    img = mpimg.imread(img_path)
-
-    return 'data:image/jpg;base64,' + numpy_2_b64(img)
-
-
-@pytest.fixture
 def test_arr():
     """Initialize test array to be used in test functions"""
     img_path = (
