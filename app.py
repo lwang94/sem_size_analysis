@@ -28,6 +28,29 @@ backend_url = 'https://saemi-backend.herokuapp.com/'
 # backend_url = f'http://{cf.HOST}:{cf.PORT}'
 
 
+# helper functions
+def b64_2_numpy(string):
+    """Converts base64 encoded image to numpy array"""
+    decoded = base64.b64decode(string)
+    im = Image.open(io.BytesIO(decoded))
+    return np.array(im)
+
+
+def numpy_2_b64(arr, enc_format='png'):
+    """Converts numpy array to base64 encoded image"""
+    img_pil = Image.fromarray(arr)
+    buff = io.BytesIO()
+    img_pil.save(buff, format=enc_format)
+    return base64.b64encode(buff.getvalue()).decode("utf-8")
+
+
+def upload_demo():
+    """Returns demo img as base64 string"""
+    fname = Path(__file__).parent / 'demo_img.jpg'
+    img = mpimg.imread(fname)
+    return numpy_2_b64(img, enc_format='jpeg')
+
+
 # dashboard layout
 dash_app.layout = al.app_layout()
 
@@ -45,20 +68,23 @@ def get_prediction(contents, n_clicks):
     ctx = dash.callback_context
     if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
         if n_clicks is not None:
-            fname = Path(__file__).parent / 'demo_img.jpg'
-            img = mpimg.imread(fname)
-            img_pil = Image.fromarray(img)
-            buff = io.BytesIO()
-            img_pil.save(buff, format='jpeg')
             imgb64 = (
                 'data:image/jpeg;base64,'
-                + base64.b64encode(buff.getvalue()).decode("utf-8")
+                + upload_demo()
             )
     else:
         imgb64 = contents
+
+    #convert from base64 to numpy array
+    content_type, content_string = imgb64.split(',')
+    img = b64_2_numpy(content_string)
+
     response = requests.post(
         f'{backend_url}/api/predict',
-        json={'contents': imgb64}
+        json={
+            'contents': img.tolist(),
+            'content_type': content_type
+        }
     )
     return response.text
 
@@ -124,114 +150,47 @@ def display_filename(filename):
 
 
 @dash_app.callback(
-    Output('output-images', 'children'),
-    [Input('pred_json', 'children')]
+    Output('ximage', 'src'),
+    [Input('upload-image', 'contents'),
+     Input('demo', 'n_clicks')]
 )
-def upload_images(pred_json):
-    """Displays uploaded image and an overlay with the prediction"""
-    data = json.loads(pred_json)
-    ximage = np.asarray(data['ximage_list'])
-    yimage = np.asarray(data['yimage_list'])
-    rf = (
-        ximage.shape[0] * ximage.shape[1]
-        / (yimage.shape[0] * yimage.shape[1])
-    )
+def display_ximage(contents, n_clicks):
+    ctx = dash.callback_context
+    if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
+        if n_clicks is not None:
+            imgb64 = (
+                'data:image/jpeg;base64,'
+                + upload_demo()
+            )
+    else:
+        imgb64 = contents
+    return imgb64
 
-    return html.Div([
-        # Overlay with prediction
-        html.Div(
-            children=[
-                html.H2(children='Overlay of Original with Segments'),
-                html.Div([
-                    html.Div(
-                        html.Div(
-                            children=[
-                                html.Img(
-                                    src=data['ximage_b64'],
-                                    style={
-                                        'height': '50%',
-                                        'width': '100%'
-                                    }
-                                ),
-                                html.Img(
-                                    src=data['yimage_b64'],
-                                    style={
-                                        'position': 'absolute',
-                                        'top': 0,
-                                        'left': 0,
-                                        'opacity': 0.5,
-                                        'height': '98%',
-                                        'width': '100%'
-                                    }
-                                )
-                            ],
-                            style={'position': 'relative'}
-                        ),
-                        style={
-                            'width': '50%',
-                            'display': 'inline-block'}
-                    ),
-                    html.Div(
-                        html.Pre(
-                            f"""Size: {yimage.shape[0]}x{yimage.shape[1]} pixels
-                            \n{al.open_txt_doc('resize_note.txt')}
-                            """,
-                            style={
-                                'fontSize': 14,
-                                'margin-left': 5,
-                                'margin-top': 0,
-                                'color': 'red'
-                            }
-                        ),
-                        style={
-                            'width': '50%',
-                            'display': 'inline-block',
-                            'vertical-align': 'top'}
-                    )
-                ])
-            ],
-            style={'textAlign': 'left'}
-        ),
-        # Original Image
-        html.Div(
-            children=[
-                html.H2(children='Original Image'),
-                html.Div([
-                    html.Div(
-                        html.Img(
-                            src=data['ximage_b64'],
-                            style={
-                                'height': '50%',
-                                'width': '100%'
-                            }
-                        ),
-                        style={
-                            'width': '50%',
-                            'display': 'inline-block'}
-                    ),
-                    html.Div(
-                        html.Pre(
-                            f"""Size: {ximage.shape[0]}x{ximage.shape[1]} pixels
-                            \nRescaling Factor: {rf:.2E}
-                            \nMean pixel value: {ximage.mean():.2E}
-                            """,
-                            style={
-                                'fontSize': 14,
-                                'margin-left': 5,
-                                'margin-top': 0,
-                                'color': 'red'
-                            }
-                        ),
-                        style={
-                            'width': '50%',
-                            'display': 'inline-block',
-                            'vertical-align': 'top'}
-                    )
-                ])
-            ],
-            style={'textAlign': 'left'}
-        )
-    ])
+
+@dash_app.callback(
+    [Output('yimage', 'src'),
+     Output('yimage', 'style')],
+    [Input('pred_json', 'children'),
+     Input('opacity_value', 'value')]
+)
+def display_yimage(pred_json, op_val):
+    data = json.loads(pred_json)
+
+    # change color from black and white to blue and gold
+    lookup = np.asarray([[45, 0, 78], [153, 153, 0]], dtype=np.uint8)
+    prediction3 = lookup[data['yimage_list']]
+    encoded_pred = data['content_type'] + ',' + numpy_2_b64(prediction3)
+
+    #specify style
+    style = {
+        'position': 'absolute',
+        'top': 0,
+        'left': 69,
+        'opacity': op_val,
+        'height': 566,
+        'width': 768
+    }
+    return encoded_pred, style
 
 
 @dash_app.callback(
@@ -241,7 +200,9 @@ def upload_images(pred_json):
 def show_labeled_pred(size_distr_json):
     """Displays labeled prediction image"""
     data = json.loads(size_distr_json)
-    return data['rgb_pred_b64']
+    rgb = np.asarray(data['rgb_pred_list'], dtype=np.uint8)
+    encoded_rgb = data['content_type'] + ',' + numpy_2_b64(rgb)
+    return encoded_rgb
 
 
 @dash_app.callback(

@@ -1,6 +1,6 @@
 SAEMI is a tool for obtaining a Size Analysis of particles in Electron Microscopy Images. To obtain a size analysis,
-first upload an Electron Microscopy image using the Upload button below. The tool will then predict how to segment the
-particles from the background using a model trained through deep learning. After segmentation, the tool will label each
-separate segment and count each segment's number of pixels. This size distribution is then displayed in a histogram which
-can be used to determine properties such as the mean size, median size or standard deviation of sizes in the image.
-Thank you for considering using this tool and any additional feedback is always welcome. Good luck!
+first upload an Electron Microscopy image using the Upload Image button below. The size distribution will then be displayed in a histogram 
+and can be downloaded as a .csv by clicking on Download Data. Please note that for the best results, the image should have minimal noise and 
+measurement artifacts. Watermarks and additional meta information (such as the scale bar) should also be removed from the image as it may be 
+mislabeled as a particle (stay tuned for image preprocessing tools in the next version!) Thank you for considering using this tool and any 
+additional feedback is always welcome. Good luck!

@@ -2,8 +2,10 @@ experiments/*
 tests/*
 .coveragerc
 .dockerignore
+.travis.yml
 Dockerfile
 LICENSE
 README.md
 setup.py
 src/training.py
+src/asyncio_api.py

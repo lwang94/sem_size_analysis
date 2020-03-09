@@ -137,18 +137,9 @@ def app_layout():
             # Labeled Prediction Image
             html.Div(
                 children=[
-                    html.H2(
-                        children='Segments',
-                        style={'textAlign': 'center'}
-                    ),
-                    html.P(
-                        children="""
-                        If the below image does not provide a satisfactory
-                        segmentation of the uploaded image, you can click
-                        on different segments to remove them from the image
-                        and size distribution histogram.
-                        """,
-                        style={'margin-left': 150, 'margin-right': 150}
+                    html.H2(children='Segments'),
+                    html.Pre(
+                        children=open_txt_doc('remove_note.txt')
                     ),
                     html.Div(
                         children=[
@@ -167,14 +158,66 @@ def app_layout():
                         style={'position': 'relative'}
                     )
                 ],
+                style={'textAlign': 'center'},
                 className='six columns'
             ),
             # Original Image and Overlay
             html.Div(
-                id='output-images',
+                children=[
+                    html.H2(children='Overlay of Original with Segments'),
+                    html.Pre(
+                        children=open_txt_doc('resize_warning.txt'),
+                        style={'margin-bottom': '32px'}
+                    ),
+                    html.Div(
+                        children=[
+                            html.Img(
+                                id='ximage',
+                                style={
+                                    'top': 32,
+                                    'height': 566,
+                                    'width': 768
+                                }
+                            ),
+                            html.Img(
+                                id='yimage'
+                            )
+                        ],
+                        style={'position': 'relative'}
+                    ),
+                    dcc.Slider(
+                        id='opacity_value',
+                        min=0,
+                        max=1,
+                        step=0.1,
+                        value=0.5,
+                    ),
+                ],
+                style={'textAlign': 'center'},
                 className='six columns'
-            )
+            ),
         ]),
+        html.Hr(),
+
+        #Feedback
+        html.Div(
+            children=[
+                html.H2('Your Feedback is Welcome!'),
+                html.P(
+                    """
+                    For any questions, concerns, or suggestions,
+                    please email me at:
+                    """
+                ),
+                html.B('lawrence.fy.wang@gmail.com'),
+                html.P('Also check out some of my other projects at:'),
+                html.A(
+                    'https://github.com/lwang94',
+                    href='https://github.com/lwang94'
+                )
+            ],
+            style={'textAlign': 'center'}
+        ),
 
         # Hidden Divs containing json data
         html.Div(id='pred_json', style={'display': 'none'}),

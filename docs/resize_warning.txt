@@ -1,0 +1,3 @@
+WARNING: For the model to predict the image segments, the image was rescaled to 192x256 pixels 
+which is done using bilinear interpolation. To match the size of the original image, the size 
+distribution in the histogram above has already been multiplied by the rescaling factor.
