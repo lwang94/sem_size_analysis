@@ -3,12 +3,18 @@
 ## Description:
 --------------
 SAEMI (Size Analysis for Electron Microscopy Images) is a tool for obtaining the size distribution of nanoparticles in electron microscopy images. 
-It uses an image segmentation model trained through a neural network to detect nanoparticle sizes and locations. The neural network used is a u-net
-with a resnet downsample created through the fastai library. From there, it then obtains a histogram of the sizes of each particle, providing 
-important information such as mean particle size, median particle size etc. This tool can be used for characterizing new materials, analyzing 
-environmental effects on chemical systems, ensure quality control for routine synthesis and much more. 
+It uses an image segmentation model trained through a neural network to detect nanoparticle sizes and locations. The neural network used is a 
+<a href="https://arxiv.org/pdf/1505.04597.pdf">u-net</a> with a resnet downsample created through the <a href="https://github.com/fastai/fastai">
+fastai</a> library. From there, it then obtains a histogram of the sizes of each particle, providing important information such as mean particle size, 
+median particle size etc. This tool can be used for characterizing new materials, analyzing environmental effects on chemical systems, 
+ensure quality control for routine synthesis and much more. 
+
+## Website:
+-------------
+You can find the app hosted on Heroku here: https://saemi.herokuapp.com/
 
 
+<!-- 
 ## Installation:
 ----------------
 ### Dependencies
@@ -47,3 +53,4 @@ With coverage:
 ```
 pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/
 ```
+-->

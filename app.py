@@ -65,12 +65,15 @@ def get_prediction(contents, n_clicks):
     image using trained model.
     """
     ctx = dash.callback_context
+
+    # if try the demo has been clicked, upload demo image
     if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
         if n_clicks is not None:
             imgb64 = (
                 'data:image/jpeg;base64,'
                 + upload_demo()
             )
+    # otherwise, upload user image
     else:
         imgb64 = contents
 
@@ -155,12 +158,16 @@ def display_filename(filename):
 )
 def display_ximage(contents, n_clicks):
     ctx = dash.callback_context
+
+    # if try the demo has been clicked, use the demo image
     if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
         if n_clicks is not None:
             imgb64 = (
                 'data:image/jpeg;base64,'
                 + upload_demo()
             )
+
+    # otherwise, use the user uplaoded image
     else:
         imgb64 = contents
     return imgb64
@@ -199,6 +206,8 @@ def display_yimage(pred_json, op_val):
 def show_labeled_pred(size_distr_json):
     """Displays labeled prediction image"""
     data = json.loads(size_distr_json)
+
+    #convert from numpy array to base64 image
     rgb = np.asarray(data['rgb_pred_list'], dtype=np.uint8)
     encoded_rgb = data['content_type'] + ',' + numpy_2_b64(rgb)
     return encoded_rgb
@@ -215,7 +224,7 @@ def update_hist(size_distr_json):
     return {
         'data': [go.Histogram(
                     x=size_distr,
-                    xbins={'size': 1}
+                    xbins={'size': 5}
                 )],
         'layout': go.Layout(
             title={
@@ -257,6 +266,8 @@ def update_hist(size_distr_json):
 def update_download_link(size_distr_json):
     data = json.loads(size_distr_json)
     size_distr = np.asarray(data['size_distr_list'])
+
+    # create .csv link from numpy array
     buff = io.StringIO()
     csv_string = np.savetxt(buff, size_distr, encoding='utf-8')
     csv_string = 'data:text/csv;charset=utf-8,' + buff.getvalue()

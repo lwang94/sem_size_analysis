@@ -10,6 +10,7 @@ def open_txt_doc(filename):
     path = (
         Path(__file__).parent
         / 'docs'
+        / 'app'
         / filename
     )
     with open(path, 'r') as txtfile:
@@ -71,7 +72,7 @@ def app_layout():
     """Returns layout for the front-end of the app"""
     return html.Div([
         # Title
-        html.H1(children='SAEMI', style={'textAlign': 'center'}),
+        html.H1(children='SAEMI: An End to End Size Analysis Tool', style={'textAlign': 'center'}),
 
         # Instructions
         html.Div(
@@ -134,10 +135,10 @@ def app_layout():
 
         # Images
         html.Div([
-            # Labeled Prediction Image
+            #Uniquely Labeled Prediction Image
             html.Div(
                 children=[
-                    html.H2(children='Segments'),
+                    html.H2(children='Uniquely Labeled Segments'),
                     html.Pre(
                         children=open_txt_doc('remove_note.txt')
                     ),
@@ -210,10 +211,10 @@ def app_layout():
                     """
                 ),
                 html.B('lawrence.fy.wang@gmail.com'),
-                html.P('Also check out some of my other projects at:'),
+                html.P('Also check out the user docs for more information:'),
                 html.A(
-                    'https://github.com/lwang94',
-                    href='https://github.com/lwang94'
+                    'https://github.com/lwang94/sem_size_analysis/tree/master/docs',
+                    href='https://github.com/lwang94/sem_size_analysis/tree/master/docs'
                 )
             ],
             style={'textAlign': 'center'}

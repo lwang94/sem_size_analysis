@@ -2,6 +2,14 @@ from ..src import config as cf
 import numpy as np
 
 
+def test_port():
+    assert isinstance(cf.PORT, int)
+
+
+def test_host():
+    assert isinstance(cf.HOST,str)
+
+
 def test_model():
     assert isinstance(cf.MODEL, str)
 

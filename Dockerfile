@@ -9,8 +9,8 @@ RUN pip install --upgrade -r requirements.txt
 
 COPY src src/
 
-RUN python -m src.asyncio_api
+RUN python -m src.backend_api
 
 EXPOSE 5000
 
-CMD ["python", "src.asyncio_api", "serve"]
+CMD ["python", "-m", "src.backend_api"]
