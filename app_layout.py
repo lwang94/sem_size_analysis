@@ -72,7 +72,10 @@ def app_layout():
     """Returns layout for the front-end of the app"""
     return html.Div([
         # Title
-        html.H1(children='SAEMI: An End to End Size Analysis Tool', style={'textAlign': 'center'}),
+        html.H1(
+            children='SAEMI: An End to End Size Analysis Tool',
+            style={'textAlign': 'center'}
+        ),
 
         # Instructions
         html.Div(
@@ -135,7 +138,7 @@ def app_layout():
 
         # Images
         html.Div([
-            #Uniquely Labeled Prediction Image
+            # Uniquely Labeled Prediction Image
             html.Div(
                 children=[
                     html.H2(children='Uniquely Labeled Segments'),
@@ -213,8 +216,16 @@ def app_layout():
                 html.B('lawrence.fy.wang@gmail.com'),
                 html.P('Also check out the user docs for more information:'),
                 html.A(
-                    'https://github.com/lwang94/sem_size_analysis/tree/master/docs',
-                    href='https://github.com/lwang94/sem_size_analysis/tree/master/docs'
+                    """
+                    https://github.com/lwang94
+                    /sem_size_analysis/tree/master/docs
+                    """,
+                    href=(
+                        """
+                        https://github.com/lwang94
+                        /sem_size_analysis/tree/master/docs
+                        """
+                    )
                 )
             ],
             style={'textAlign': 'center'}

@@ -207,7 +207,7 @@ def show_labeled_pred(size_distr_json):
     """Displays labeled prediction image"""
     data = json.loads(size_distr_json)
 
-    #convert from numpy array to base64 image
+    # convert from numpy array to base64 image
     rgb = np.asarray(data['rgb_pred_list'], dtype=np.uint8)
     encoded_rgb = data['content_type'] + ',' + numpy_2_b64(rgb)
     return encoded_rgb
