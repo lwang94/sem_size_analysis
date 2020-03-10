@@ -7,7 +7,7 @@ def test_port():
 
 
 def test_host():
-    assert isinstance(cf.HOST,str)
+    assert isinstance(cf.HOST, str)
 
 
 def test_model():

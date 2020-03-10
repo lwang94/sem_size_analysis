@@ -32,27 +32,27 @@ binary image consisting of 0s and 1s where 0 represents a background pixel and 1
 # Give Unique Labels to Each Segment and Count Them
 -----------------------------------
 To obtain a size distribution, the resulting binary image is further processed. Connected regions of 1s in the binary image is given a unique label eg.
-
+```
 [[1, 0, 0, 1, 1],      [[1, 0, 0, 2, 2],
  [0, 0, 0, 1, 1],       [0, 0, 0, 2, 2],
  [1, 1, 0, 0, 0],  -->  [3, 3, 0, 0, 0],
  [1, 0, 0, 0, 0],       [3, 0, 0, 0, 0],
  [0, 0, 0, 1, 1]]       [0, 0, 0, 4, 4]]
-
+```
 The number of unique labels are then counted up and put into a separate array to represent the sizes of the particles in the image. For the example above,
 the size distribution would be:
-
+```
 {1:1, 2:4, 3:3, 4:2} --> [1, 4, 3, 2].
-
+```
 Since the "pixel size" is calculated for the 192x256 binary image, the elements in the array are then multiplied by a rescaling factor to match the size of the
 original image. For instance, if the above list was obtained for an image that was originally 768x1024 pixels in size, the rescaling factor is:
-
+```
 (768x1024) / (192x256) = 16
-
+```
 and the final array would be:
-
+```
 [16, 64, 48, 32].
-
+```
 <b>Please note that the "sizes" that are calculated is the number of pixels that a particle takes up in the image and it is left up to the user to convert from pixels
 to a physical size</b>. 
 

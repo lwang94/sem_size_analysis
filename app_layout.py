@@ -218,12 +218,12 @@ def app_layout():
                 html.A(
                     """
                     https://github.com/lwang94
-                    /sem_size_analysis/tree/master/docs
+                    /sem_size_analysis/tree/master/docs/user_docs.md
                     """,
                     href=(
                         """
                         https://github.com/lwang94
-                        /sem_size_analysis/tree/master/docs
+                        /sem_size_analysis/tree/master/docs/user_docs.md
                         """
                     )
                 )
