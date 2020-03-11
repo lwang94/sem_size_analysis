@@ -172,4 +172,9 @@ async def clicked_size_distr(request):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app=star_app, host=cf.HOST, port=cf.BACKEND_PORT, log_level="info")
+    uvicorn.run(
+        app=star_app,
+        host=cf.HOST,
+        port=cf.BACKEND_PORT,
+        log_level="info"
+    )
