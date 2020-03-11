@@ -2,8 +2,8 @@ from ..src import config as cf
 import numpy as np
 
 
-def test_port():
-    assert isinstance(cf.PORT, int)
+def test_backendport():
+    assert isinstance(cf.BACKEND_PORT, int)
 
 
 def test_host():

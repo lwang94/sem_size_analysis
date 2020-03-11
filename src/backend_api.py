@@ -8,7 +8,7 @@ from . import config as cf
 
 flask_app = Flask(__name__)
 host = cf.HOST
-port = cf.PORT
+port = cf.BACKEND_PORT
 
 # load model
 learn = pred.fetch_learner()

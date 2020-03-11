@@ -5,5 +5,8 @@ data/*
 .ipynb_checkpoints/*
 experiments/.ipynb_checkpoints
 src/asyncio_api.py
+.dockerignore
+Dockerfile
+setup.py
 stage-2_bs16.pkl
 stage-2_bs24_rnet18.pkl

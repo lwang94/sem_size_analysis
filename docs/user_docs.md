@@ -1,8 +1,8 @@
 # Brief Overview
 ------------------
 SAEMI is a tool that uses deep learning to obtain the size distribution of nanoparticles in electron microscopy images.
-The deep learning model is a <a href="https://arxiv.org/pdf/1505.04597.pdf">u-net</a> with a resnet18 downsample created 
-through the <a href="https://github.com/fastai/fastai">fastai</a> library. See below for a brief outline of the computation
+The deep learning model is a [unet](https://arxiv.org/pdf/1505.04597.pdf) with a resnet18 downsample created 
+through the [fastai](https://github.com/fastai/fastai) library. See below for a brief outline of the computation
 process:
 
 Upload Image &rarr; Preprocess Image &rarr; Segment Image Using U-net Model &rarr; Give Unique Labels to Each Segment and Count Them &rarr; Display Histogram & Segmented Image
@@ -13,8 +13,7 @@ To upload an image, use the <b> UPLOAD IMAGE </b> at the top of the app. To ensu
 please ensure that the image has minimal noise and imaging artifacts. Watermarks and additional meta information (such as the scale bar) may also
 be mislabeled as a particle during the segmentation process and so should be removed before uploading (although mislabeled segement can be removed
 post segmentation; see Display Histogram and Segmented Image below). Tools to minimize noise or remove watermarks include Python based libraries 
-such as <a href="https://scikit-image.org/">scikit-image</a> and <a href="https://opencv.org/">opencv</a> or for a more GUI based approach, 
-<a href="https://imagej.net/Welcome">ImageJ</a>.
+such as [scikit-image](https://scikit-image.org/) and [opencv](https://opencv.org/) or for a more GUI based approach, [ImageJ](https://imagej.net/Welcome).
 
 # Preprocess Image
 ----------------------
@@ -25,8 +24,8 @@ skimage.transform.resize</a>.
 
 # Segment Image Using U-net Model
 ------------------------
-The model used to segment the image was trained using SEM images obtained from <a href="https://b2share.eudat.eu/records/80df8606fcdb4b2bae1656f0dc6db8ba">NFFA-EUROPE</a>. The model was determined
-to have 97% accuracy using the <a href="https://towardsdatascience.com/metrics-to-evaluate-your-semantic-segmentation-model-6bcb99639aa2">Dice metric</a>. The result of segmentation is a 192x256
+The model used to segment the image was trained using SEM images obtained from [NFFA-EUROPE](https://b2share.eudat.eu/records/80df8606fcdb4b2bae1656f0dc6db8ba). The model was determined
+to have 97% accuracy using the [Dice metric](https://towardsdatascience.com/metrics-to-evaluate-your-semantic-segmentation-model-6bcb99639aa2). The result of segmentation is a 192x256
 binary image consisting of 0s and 1s where 0 represents a background pixel and 1 represents a particle pixel. 
 
 # Give Unique Labels to Each Segment and Count Them

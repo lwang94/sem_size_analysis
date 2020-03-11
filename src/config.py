@@ -4,7 +4,7 @@ import os
 import numpy as np
 from pathlib import Path
 
-PORT = int(os.environ.get("PORT", 5000))
+BACKEND_PORT = int(os.environ.get("PORT", 5000))
 HOST = '0.0.0.0'
 
 MODEL = 'stage-2_bs24_rnet18.pkl'

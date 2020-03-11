@@ -7,12 +7,7 @@ from pathlib import Path
 
 def open_txt_doc(filename):
     """Opens texts in docs folder that go in front end of app"""
-    path = (
-        Path(__file__).parent
-        / 'docs'
-        / 'app'
-        / filename
-    )
+    path = Path(__file__).parent / 'docs' / 'app' / filename
     with open(path, 'r') as txtfile:
         text = txtfile.read()
     return text
