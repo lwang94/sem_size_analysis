@@ -1,9 +1,8 @@
 import pytest
 
-from ..src import flask_api as fa
+from ..src import backend_api as ba
 
 import matplotlib.image as mpimg
-import numpy as np
 import json
 from pathlib import Path
 
@@ -11,24 +10,10 @@ from pathlib import Path
 @pytest.fixture
 def client():
     """Create client for testing"""
-    fa.app.config['TESTING'] = True
+    ba.flask_app.config['TESTING'] = True
 
-    with fa.app.test_client() as client:
+    with ba.flask_app.test_client() as client:
         yield client
-
-
-@pytest.fixture
-def test_img():
-    """Initialize test image to be used in test functions"""
-    img_path = (
-        Path(__file__).parent
-        / 'images'
-        / 'train_x'
-        / 'L2_0a7efff5757e6b543ee1a0d17328c881.jpg'
-    )
-    img = mpimg.imread(img_path)
-
-    return 'data:image/jpg;base64,' + fa.numpy_2_b64(img)
 
 
 @pytest.fixture
@@ -44,24 +29,7 @@ def test_arr():
     return img
 
 
-def test_numpy_2_b64(test_img):
-    """
-    Tests numpy_2_b64 funcion in flask_api by
-    asserting the output is a string
-    """
-    assert isinstance(test_img, str)
-
-
-def test_b64_2_numpy(test_img):
-    """
-    Tests b64_2_numpy function in flask_api by
-    asserting the output is a numpy array
-    """
-    arr = fa.b64_2_numpy(test_img.split(',')[1])
-    assert isinstance(arr, np.ndarray)
-
-
-def test_predict(client, test_img):
+def test_predict(client, test_arr):
     """
     Tests predict function in flask_api by
     asserting the output json contains a list
@@ -70,15 +38,16 @@ def test_predict(client, test_img):
     res = client.post(
         '/api/predict',
         json={
-            'contents': test_img
+            'content_type': 'data:image/jpeg;base64',
+            'contents': test_arr.tolist()
         }
     )
     pred = json.loads(res.data)
     assert isinstance(pred['yimage_list'], list)
-    assert isinstance(pred['yimage_b64'], str)
+    assert isinstance(pred['rf'], float)
 
 
-def test_orig_size_distr(client, test_img, test_arr):
+def test_orig_size_distr(client, test_arr):
     """
     Tests orig_size_distr function in flask_api by
     asserting the output json contains lists and strings
@@ -89,22 +58,20 @@ def test_orig_size_distr(client, test_img, test_arr):
         json={
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'ximage_b64': test_img,
-                'yimage_b64': test_img,
+                'rf': 2,
                 'yimage_list': test_arr[:, :, 0].tolist()
             })
         }
     )
     dat = json.loads(res.data)
 
-    assert isinstance(dat['rgb_pred_b64'], str)
     assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)
     assert isinstance(dat['size_distr_list'], list)
 
 
-def test_clicked_size_distr(client, test_img, test_arr):
+def test_clicked_size_distr(client, test_arr):
     """
     Tests clicked_size_distr function in flask_api by
     asserting the output json contains lists and strings
@@ -116,8 +83,7 @@ def test_clicked_size_distr(client, test_img, test_arr):
         json={
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'ximage_b64': test_img,
-                'yimage_b64': test_img,
+                'rf': 2,
                 'yimage_list': test_arr[:, :, 0].tolist()
             }),
             'click': {
@@ -131,7 +97,6 @@ def test_clicked_size_distr(client, test_img, test_arr):
             },
             'size_distr_json': json.dumps({
                 'content_type': 'data:image/jpg;base64',
-                'rgb_pred_b64': test_img,
                 'rgb_pred_list': test_list,
                 'labeled_list': test_arr[:, :, 0].tolist(),
                 'unique_list': [1, 2, 3],
@@ -140,7 +105,6 @@ def test_clicked_size_distr(client, test_img, test_arr):
         }
     )
     dat = json.loads(res.data)
-    assert isinstance(dat['rgb_pred_b64'], str)
     assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)

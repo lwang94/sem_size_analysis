@@ -5,15 +5,11 @@ import plotly.graph_objs as go
 from pathlib import Path
 
 
-def instructions():
-    """Instructions for using app"""
-    path_instructions = (
-        Path(__file__).parents[1]
-        / 'docs'
-        / 'instructions.txt'
-    )
-    with open(path_instructions, 'r') as instruction_file:
-        text = instruction_file.read()
+def open_txt_doc(filename):
+    """Opens texts in docs folder that go in front end of app"""
+    path = Path(__file__).parent / 'docs' / 'app' / filename
+    with open(path, 'r') as txtfile:
+        text = txtfile.read()
     return text
 
 
@@ -71,7 +67,10 @@ def app_layout():
     """Returns layout for the front-end of the app"""
     return html.Div([
         # Title
-        html.H1(children='SAEMI', style={'textAlign': 'center'}),
+        html.H1(
+            children='SAEMI: An End to End Size Analysis Tool',
+            style={'textAlign': 'center'}
+        ),
 
         # Instructions
         html.Div(
@@ -88,10 +87,24 @@ def app_layout():
             style={'textAlign': 'center'}
         ),
 
-        # Upload file button
-        dcc.Upload(
-            id='upload-image',
-            children=html.Button('Upload File'),
+        # Upload demo or file
+        html.Div(
+            children=[
+                html.Div(
+                    html.Button(
+                        id='demo',
+                        children='Try the Demo'
+                    ),
+                    style={'display': 'inline-block'}
+                ),
+                html.Div(
+                    dcc.Upload(
+                        id='upload-image',
+                        children=html.Button('Upload Image'),
+                    ),
+                    style={'display': 'inline-block'}
+                )
+            ],
             style={'display': 'flex', 'justify-content': 'center'}
         ),
 
@@ -108,25 +121,24 @@ def app_layout():
 
         # Histogram
         dcc.Graph(id='size_distr_graph'),
+        html.A(
+            'Download Data',
+            id='download-link',
+            download='size_distribution.csv',
+            href='',
+            target='_blank',
+            style={'display': 'flex', 'justify-content': 'center'}
+        ),
         html.Hr(),
 
         # Images
         html.Div([
-            # Labeled Prediction Image
+            # Uniquely Labeled Prediction Image
             html.Div(
                 children=[
-                    html.H2(
-                        children='Segments',
-                        style={'textAlign': 'center'}
-                    ),
-                    html.P(
-                        children="""
-                        If the below image does not provide a satisfactory
-                        segmentation of the uploaded image, you can click
-                        on different segments to remove them from the image
-                        and size distribution histogram below.
-                        """,
-                        style={'margin-left': 150, 'margin-right': 150}
+                    html.H2(children='Uniquely Labeled Segments'),
+                    html.Pre(
+                        children=open_txt_doc('remove_note.txt')
                     ),
                     html.Div(
                         children=[
@@ -145,14 +157,74 @@ def app_layout():
                         style={'position': 'relative'}
                     )
                 ],
+                style={'textAlign': 'center'},
                 className='six columns'
             ),
             # Original Image and Overlay
             html.Div(
-                id='output-images',
+                children=[
+                    html.H2(children='Overlay of Original with Segments'),
+                    html.Pre(
+                        children=open_txt_doc('resize_warning.txt'),
+                        style={'margin-bottom': '32px'}
+                    ),
+                    html.Div(
+                        children=[
+                            html.Img(
+                                id='ximage',
+                                style={
+                                    'top': 32,
+                                    'height': 566,
+                                    'width': 768
+                                }
+                            ),
+                            html.Img(
+                                id='yimage'
+                            )
+                        ],
+                        style={'position': 'relative'}
+                    ),
+                    dcc.Slider(
+                        id='opacity_value',
+                        min=0,
+                        max=1,
+                        step=0.1,
+                        value=0.5,
+                    ),
+                ],
+                style={'textAlign': 'center'},
                 className='six columns'
-            )
+            ),
         ]),
+        html.Hr(),
+
+        # Feedback
+        html.Div(
+            children=[
+                html.H2('Your Feedback is Welcome!'),
+                html.P(
+                    """
+                    For any questions, concerns, or suggestions,
+                    please email me at:
+                    """
+                ),
+                html.B('lawrence.fy.wang@gmail.com'),
+                html.P('Also check out the user docs for more information:'),
+                html.A(
+                    """
+                    https://github.com/lwang94
+                    /sem_size_analysis/tree/master/docs/user_docs.md
+                    """,
+                    href=(
+                        """
+                        https://github.com/lwang94
+                        /sem_size_analysis/tree/master/docs/user_docs.md
+                        """
+                    )
+                )
+            ],
+            style={'textAlign': 'center'}
+        ),
 
         # Hidden Divs containing json data
         html.Div(id='pred_json', style={'display': 'none'}),

@@ -17,6 +17,10 @@ def learn():
 
 
 def test_fetch_learner(learn):
+    """
+    Tests fetch_learner in predict by
+    asserting the output is of type Learner
+    """
     assert isinstance(learn, Learner)
 
 

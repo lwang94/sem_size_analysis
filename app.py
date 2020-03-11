@@ -1,5 +1,4 @@
 import dash
-import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
@@ -7,7 +6,13 @@ import json
 import requests
 import numpy as np
 
-from . import dash_layout as dl
+import matplotlib.image as mpimg
+from pathlib import Path
+from PIL import Image
+import io
+import base64
+
+import app_layout as al
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -16,24 +21,70 @@ dash_app = dash.Dash(
     __name__,
     external_stylesheets=external_stylesheets
 )
+server = dash_app.server
+backend_url = 'https://saemi-backend.herokuapp.com/'
+
+
+# helper functions
+def b64_2_numpy(string):
+    """Converts base64 encoded image to numpy array"""
+    decoded = base64.b64decode(string)
+    im = Image.open(io.BytesIO(decoded))
+    return np.array(im)
+
+
+def numpy_2_b64(arr, enc_format='png'):
+    """Converts numpy array to base64 encoded image"""
+    img_pil = Image.fromarray(arr)
+    buff = io.BytesIO()
+    img_pil.save(buff, format=enc_format)
+    return base64.b64encode(buff.getvalue()).decode("utf-8")
+
+
+def upload_demo():
+    """Returns demo img as base64 string"""
+    fname = Path(__file__).parent / 'demo_img.jpg'
+    img = mpimg.imread(fname)
+    return numpy_2_b64(img, enc_format='jpeg')
 
 
 # dashboard layout
-dash_app.layout = dl.app_layout()
+dash_app.layout = al.app_layout()
 
 
 @dash_app.callback(
     Output('pred_json', 'children'),
-    [Input('upload-image', 'contents')]
+    [Input('upload-image', 'contents'),
+     Input('demo', 'n_clicks')]
 )
-def get_prediction(contents):
+def get_prediction(contents, n_clicks):
     """
     Gets image segmentation prediction of uploaded
     image using trained model.
     """
+    ctx = dash.callback_context
+
+    # if try the demo has been clicked, upload demo image
+    if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
+        if n_clicks is not None:
+            imgb64 = (
+                'data:image/jpeg;base64,'
+                + upload_demo()
+            )
+    # otherwise, upload user image
+    else:
+        imgb64 = contents
+
+    # convert from base64 to numpy array
+    content_type, content_string = imgb64.split(',')
+    img = b64_2_numpy(content_string)
+
     response = requests.post(
-        'http://localhost:5000/api/predict',
-        json={'contents': contents}
+        f'{backend_url}/api/predict',
+        json={
+            'contents': img.tolist(),
+            'content_type': content_type
+        }
     )
     return response.text
 
@@ -55,7 +106,7 @@ def get_size_distr(pred_json, click, size_distr_json):
     # if a new image has been uploaded, call orig_size_distr route in flask_api
     if ctx.triggered[-1]['prop_id'] == 'pred_json.children':
         response = requests.post(
-            'http://localhost:5000/api/orig_size_distr',
+            f'{backend_url}/api/orig_size_distr',
             json={'data_pred': pred_json}
             )
         return response.text
@@ -63,7 +114,7 @@ def get_size_distr(pred_json, click, size_distr_json):
     # otherwise, call clicked_size_distr route in flask_api
     else:
         response = requests.post(
-            'http://localhost:5000/api/clicked_size_distr',
+            f'{backend_url}/api/clicked_size_distr',
             json={
                 'data_pred': pred_json,
                 'click': click,
@@ -86,7 +137,7 @@ def show_instructions(n_clicks):
     if n_clicks is None or n_clicks % 2 == 0:
         return ''
     else:
-        return dl.instructions()
+        return al.open_txt_doc('instructions.txt')
 
 
 @dash_app.callback(
@@ -99,60 +150,51 @@ def display_filename(filename):
 
 
 @dash_app.callback(
-    Output('output-images', 'children'),
-    [Input('pred_json', 'children')]
+    Output('ximage', 'src'),
+    [Input('upload-image', 'contents'),
+     Input('demo', 'n_clicks')]
 )
-def upload_images(pred_json):
-    """Displays uploaded image and an overlay with the prediction"""
+def display_ximage(contents, n_clicks):
+    ctx = dash.callback_context
+
+    # if try the demo has been clicked, use the demo image
+    if ctx.triggered[-1]['prop_id'] == 'demo.n_clicks':
+        if n_clicks is not None:
+            imgb64 = (
+                'data:image/jpeg;base64,'
+                + upload_demo()
+            )
+
+    # otherwise, use the user uplaoded image
+    else:
+        imgb64 = contents
+    return imgb64
+
+
+@dash_app.callback(
+    [Output('yimage', 'src'),
+     Output('yimage', 'style')],
+    [Input('pred_json', 'children'),
+     Input('opacity_value', 'value')]
+)
+def display_yimage(pred_json, op_val):
     data = json.loads(pred_json)
 
-    return html.Div([
-        # Original Image
-        html.Div(
-            children=[
-                html.H2(children='Original Image'),
-                html.Img(
-                    src=data['ximage_b64'],
-                    style={
-                        'height': '50%',
-                        'width': '50%'
-                    }
-                )
-            ],
-            style={'textAlign': 'left'}
-        ),
+    # change color from black and white to blue and gold
+    lookup = np.asarray([[45, 0, 78], [153, 153, 0]], dtype=np.uint8)
+    prediction3 = lookup[data['yimage_list']]
+    encoded_pred = data['content_type'] + ',' + numpy_2_b64(prediction3)
 
-        # Overlay with prediction
-        html.Div(
-            children=[
-                html.H2(children='Overlay of Segments with Original'),
-                html.Div(
-                    children=[
-                        html.Img(
-                            src=data['ximage_b64'],
-                            style={
-                                'height': '50%',
-                                'width': '50%'
-                            }
-                        ),
-                        html.Img(
-                            src=data['yimage_b64'],
-                            style={
-                                'position': 'absolute',
-                                'top': 0,
-                                'left': 0,
-                                'opacity': 0.5,
-                                'height': '98%',
-                                'width': '50%'
-                            }
-                        )
-                    ],
-                    style={'position': 'relative'}
-                )
-            ],
-            style={'textAlign': 'left'}
-        ),
-    ])
+    # specify style
+    style = {
+        'position': 'absolute',
+        'top': 0,
+        'left': 69,
+        'opacity': op_val,
+        'height': 566,
+        'width': 768
+    }
+    return encoded_pred, style
 
 
 @dash_app.callback(
@@ -162,7 +204,11 @@ def upload_images(pred_json):
 def show_labeled_pred(size_distr_json):
     """Displays labeled prediction image"""
     data = json.loads(size_distr_json)
-    return data['rgb_pred_b64']
+
+    # convert from numpy array to base64 image
+    rgb = np.asarray(data['rgb_pred_list'], dtype=np.uint8)
+    encoded_rgb = data['content_type'] + ',' + numpy_2_b64(rgb)
+    return encoded_rgb
 
 
 @dash_app.callback(
@@ -176,7 +222,7 @@ def update_hist(size_distr_json):
     return {
         'data': [go.Histogram(
                     x=size_distr,
-                    xbins={'size': 1}
+                    xbins={'size': 5}
                 )],
         'layout': go.Layout(
             title={
@@ -184,7 +230,10 @@ def update_hist(size_distr_json):
                 'font': {'size': 28}
             },
             xaxis={'title': 'Size (pixels)'},
-            yaxis={'title': 'Count'},
+            yaxis={
+                'title': 'Count',
+                'tickformat': ',d'
+            },
             annotations=[
                 go.layout.Annotation(
                     text=(
@@ -206,6 +255,21 @@ def update_hist(size_distr_json):
             ]
         )
     }
+
+
+@dash_app.callback(
+    Output('download-link', 'href'),
+    [Input('size_distr_json', 'children')]
+)
+def update_download_link(size_distr_json):
+    data = json.loads(size_distr_json)
+    size_distr = np.asarray(data['size_distr_list'])
+
+    # create .csv link from numpy array
+    buff = io.StringIO()
+    csv_string = np.savetxt(buff, size_distr, encoding='utf-8')
+    csv_string = 'data:text/csv;charset=utf-8,' + buff.getvalue()
+    return csv_string
 
 
 if __name__ == '__main__':

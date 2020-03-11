@@ -2,8 +2,8 @@ import numpy as np
 from skimage import measure
 from . import config as cf
 from pathlib import Path
-import gdown
 
+import gdown
 from fastai.vision import load_learner
 
 
@@ -18,7 +18,7 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     else:
         url = cf.MODEL_URL
         gdown.download(url, model, quiet=False)
-        learn = load_learner(Path(__file__).parents[1], model)
+        learn = load_learner(path, model)
     return learn
 
 

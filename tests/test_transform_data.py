@@ -55,6 +55,10 @@ def test_make_3channel():
 
 
 def test_reflect_pad(test_image):
+    """
+    Tests reflect_pad function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.reflect_pad(img, (0, 500, img.shape[1], 600))
     assert img.shape == new_img.shape
@@ -72,12 +76,20 @@ def test_reflect_pad(test_image):
 
 
 def test_replace_constant(test_image):
+    """
+    Tests replace_constant function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.replace_constant(img, (0, 500, img.shape[1], 600), 0)
     assert img.shape == new_img.shape
 
 
 def test_replace_neighbor(test_image):
+    """
+    Tests replace_neighbor function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.replace_neighbor(img, (0, 500, img.shape[1], 600))
     assert img.shape == new_img.shape
@@ -96,12 +108,20 @@ def test_replace_neighbor(test_image):
 
 
 def test_replace_whitewm_constant(test_image):
+    """
+    Tests replace_whitewm_constant function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.replace_whitewm_constant(img, (0, 500, img.shape[1], 600), 0)
     assert img.shape == new_img.shape
 
 
 def test_replace_whitewm_avg(test_image):
+    """
+    Tests replace_whitewm_avg function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.replace_whitewm_avg(img, (0, 500, img.shape[1], 600))
     assert img.shape == new_img.shape
@@ -116,6 +136,10 @@ def test_replace_whitewm_avg(test_image):
 
 
 def test_whitewm_moving_avg(test_image):
+    """
+    Tests whitewm_moving_avg function in transform_data
+    by asserting the output shape
+    """
     img = test_image
     new_img = td.whitewm_moving_avg(img, (0, 500, img.shape[1], 600))
     assert img.shape == new_img.shape

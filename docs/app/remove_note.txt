@@ -1,0 +1,3 @@
+NOTE: If the below image does not provide a satisfactory segmentation
+of the uploaded image, you can click on different segments to remove
+them from the image and size distribution histogram.
