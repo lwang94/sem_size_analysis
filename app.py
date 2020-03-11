@@ -13,7 +13,6 @@ import io
 import base64
 
 import app_layout as al
-# from src import config as cf
 
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -24,7 +23,6 @@ dash_app = dash.Dash(
 )
 server = dash_app.server
 backend_url = 'https://saemi-backend.herokuapp.com/'
-# backend_url = f'http://{cf.HOST}:{cf.BACKEND_PORT}'
 
 
 # helper functions
