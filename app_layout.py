@@ -117,10 +117,22 @@ def app_layout():
                 'fontSize': 12
             }
         ),
+        html.Img(
+            id='raw_image',
+            style={
+                'height': 192,
+                'width': 256,
+                'display': 'block',
+                'margin-right': 'auto',
+                'margin-left': 'auto'
+            }
+        ),
         html.Hr(),
 
         # Histogram
-        dcc.Graph(id='size_distr_graph'),
+        dcc.Graph(
+            id='size_distr_graph'
+        ),
         html.A(
             'Download Data',
             id='download-link',

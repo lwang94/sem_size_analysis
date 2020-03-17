@@ -6,12 +6,13 @@ to be put into deep learning model
 import numpy as np
 from skimage import transform
 from fastai.vision import Image
-from torch import FloatTensor
+from fastai.torch_core import to_half
+from torch import HalfTensor
 
 
 def fastai_image(img):
     """Turns numpy array into fastai Image object"""
-    img = FloatTensor(img)
+    img = HalfTensor(img)
     img = img.permute(2, 0, 1)
     return Image(img)
 

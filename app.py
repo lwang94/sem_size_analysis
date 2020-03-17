@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
-import json
+import ujson as json
 import requests
 import numpy as np
 
@@ -23,7 +23,6 @@ dash_app = dash.Dash(
 )
 server = dash_app.server
 backend_url = 'https://saemi-backend.herokuapp.com/'
-
 
 # helper functions
 def b64_2_numpy(string):
@@ -150,7 +149,8 @@ def display_filename(filename):
 
 
 @dash_app.callback(
-    Output('ximage', 'src'),
+    [Output('ximage', 'src'),
+     Output('raw_image', 'src')],
     [Input('upload-image', 'contents'),
      Input('demo', 'n_clicks')]
 )
@@ -168,7 +168,7 @@ def display_ximage(contents, n_clicks):
     # otherwise, use the user uplaoded image
     else:
         imgb64 = contents
-    return imgb64
+    return imgb64, imgb64
 
 
 @dash_app.callback(
