@@ -6,7 +6,6 @@ from . import predict as pred
 from . import transform_data as td
 from . import config as cf
 
-from werkzeug.middleware.profiler import ProfilerMiddleware
 
 flask_app = Flask(__name__)
 host = cf.HOST
@@ -141,6 +140,4 @@ def clicked_size_distr():
 
 
 if __name__ == '__main__':
-    flask_app.config['PROFILE'] = True
-    flask_app.wsgi_app = ProfilerMiddleware(flask_app.wsgi_app, restrictions=[30])
     flask_app.run(debug=True, host=host, port=port)
