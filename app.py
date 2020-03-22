@@ -214,16 +214,22 @@ def show_labeled_pred(size_distr_json):
 
 @dash_app.callback(
     Output('size_distr_graph', 'figure'),
-    [Input('size_distr_json', 'children')]
+    [Input('size_distr_json', 'children'),
+     Input('binsize', 'value')]
 )
-def update_hist(size_distr_json):
+def update_hist(size_distr_json, value):
     """Displays histogram of size distribution"""
     data = json.loads(size_distr_json)
     size_distr = np.asarray(data['size_distr_list'])
+    if value is None:
+        bin_size = 10
+    else:
+        bin_size = value
+
     return {
         'data': [go.Histogram(
                     x=size_distr,
-                    xbins={'size': 5}
+                    xbins={'size': bin_size}
                 )],
         'layout': go.Layout(
             title={

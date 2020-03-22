@@ -128,7 +128,16 @@ def app_layout():
             }
         ),
         html.Hr(),
-
+        html.Div(
+            dcc.Input(
+                id='binsize',
+                placeholder='Enter Bin Size',
+                type='number',
+                debounce=True,
+                min=1
+            ),
+            style={'display': 'flex', 'justify-content': 'center'}
+        ),
         # Histogram
         dcc.Graph(
             id='size_distr_graph'
@@ -223,15 +232,15 @@ def app_layout():
                 html.B('lawrence.fy.wang@gmail.com'),
                 html.P('Also check out the user docs for more information:'),
                 html.A(
-                    """
-                    https://github.com/lwang94
-                    /sem_size_analysis/tree/master/docs/user_docs.md
-                    """,
+                    (
+                        "https://github.com/lwang94"
+                        "/sem_size_analysis/blob/master"
+                        "/docs/user_docs.md"
+                    ),
                     href=(
-                        """
-                        https://github.com/lwang94
-                        /sem_size_analysis/tree/master/docs/user_docs.md
-                        """
+                        "https://github.com/lwang94"
+                        "/sem_size_analysis/blob/master"
+                        "/docs/user_docs.md"
                     )
                 )
             ],
