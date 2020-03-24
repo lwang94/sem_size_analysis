@@ -2,6 +2,7 @@ dash==1.9.1
 fastai==1.0.60
 flake8==3.7.9
 gdown==3.10.1
+gunicorn==20.0.4
 pytest-cov==2.8.1
 scikit-image==0.16.2
 --find-links https://download.pytorch.org/whl/torch_stable.html
