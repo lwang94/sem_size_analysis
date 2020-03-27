@@ -1,5 +1,4 @@
 import numpy as np
-from skimage import measure
 from . import config as cf
 from pathlib import Path
 

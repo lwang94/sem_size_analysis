@@ -4,7 +4,6 @@ to be put into deep learning model
 """
 
 import numpy as np
-from skimage import transform
 from fastai.vision import Image
 from torch import FloatTensor
 
