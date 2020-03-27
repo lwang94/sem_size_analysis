@@ -62,5 +62,8 @@ def get_size_distr(pred):
         the background.
     """
     # labels each connected region with a unique value
-    unique, pred_labeled, stats, centroid = cv2.connectedComponentsWithStats(1 - pred, connectivity=4)
+    unique, pred_labeled, stats, centroid = cv2.connectedComponentsWithStats(
+                                                1 - pred,
+                                                connectivity=4
+                                            )
     return pred_labeled, np.arange(1, unique), stats[1:, -1]
