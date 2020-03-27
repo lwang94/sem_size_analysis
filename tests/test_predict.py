@@ -61,7 +61,8 @@ def test_get_size_distr():
          [0, 0, 1, 1, 1],
          [0, 0, 1, 1, 1],
          [1, 1, 0, 0, 0],
-         [1, 1, 0, 0, 0]]
+         [1, 1, 0, 0, 0]],
+         dtype=np.uint8
     )
 
     labeled, unique, size_distr = predict.get_size_distr(pred)
