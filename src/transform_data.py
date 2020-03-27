@@ -8,6 +8,8 @@ from skimage import transform
 from fastai.vision import Image
 from torch import FloatTensor
 
+import cv2
+
 
 def fastai_image(img):
     """Turns numpy array into fastai Image object"""
@@ -34,7 +36,11 @@ def resize(img, size, order=1):
     ------------------------------------
     resized_img : ndarray
     """
-    return transform.resize(img, size, order=order)
+    orig_shape = img.shape[:-1]
+    sigx = ((orig_shape[1] / size[0]) - 1) / 2
+    sigy = ((orig_shape[0] / size[1]) - 1) / 2
+    img = cv2.GaussianBlur(img, (0, 0), sigx, sigy, borderType=cv2.BORDER_REFLECT_101)
+    return (cv2.resize(img, size, interpolation=cv2.INTER_LINEAR) - 1) / 255
 
 
 def make_3channel(img):

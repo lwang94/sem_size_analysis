@@ -6,6 +6,8 @@ from pathlib import Path
 import gdown
 from fastai.vision import load_learner
 
+import cv2
+
 
 def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     """
@@ -61,6 +63,5 @@ def get_size_distr(pred):
         the background.
     """
     # labels each connected region with a unique value
-    pred_labeled = measure.label(pred, background=255, connectivity=1)
-    unique, counts = np.unique(pred_labeled, return_counts=True)
-    return pred_labeled, unique[1:], counts[1:]
+    unique, pred_labeled, stats, centroid = cv2.connectedComponentsWithStats(1 - pred, connectivity=4)
+    return pred_labeled, np.arange(1, unique), stats[1:, -1]
