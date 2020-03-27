@@ -24,7 +24,6 @@ dash_app = dash.Dash(
 server = dash_app.server
 backend_url = 'https://saemi-backend.herokuapp.com/'
 
-
 # helper functions
 def b64_2_numpy(string):
     """Converts base64 encoded image to numpy array"""

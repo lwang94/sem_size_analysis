@@ -57,11 +57,11 @@ def test_get_size_distr():
     connected regions.
     """
     pred = np.array(
-        [[255, 255, 255, 255, 255],
-         [0,   0,   255, 255, 255],
-         [0,   0,   255, 255, 255],
-         [255, 255, 0,   0,   0],
-         [255, 255, 0,   0,   0]]
+        [[1, 1, 1, 1, 1],
+         [0, 0, 1, 1, 1],
+         [0, 0, 1, 1, 1],
+         [1, 1, 0, 0, 0],
+         [1, 1, 0, 0, 0]]
     )
 
     labeled, unique, size_distr = predict.get_size_distr(pred)
