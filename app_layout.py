@@ -127,6 +127,13 @@ def app_layout():
                 'margin-left': 'auto'
             }
         ),
+
+        # Loading progress
+        dcc.Loading(
+            html.Div(id='pred_json', style={'display': 'none'}),
+            type='cube'
+        ),
+
         html.Hr(),
         html.Div(
             dcc.Input(
@@ -247,7 +254,6 @@ def app_layout():
             style={'textAlign': 'center'}
         ),
 
-        # Hidden Divs containing json data
-        html.Div(id='pred_json', style={'display': 'none'}),
+        # Hidden Div containing size distribution json data
         html.Div(id='size_distr_json', style={'display': 'none'})
     ])
