@@ -2,7 +2,7 @@ import dash
 from dash.dependencies import Input, Output, State
 import plotly.graph_objs as go
 
-import ujson as json
+import json
 import requests
 import numpy as np
 

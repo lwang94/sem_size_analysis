@@ -1,5 +1,5 @@
 from flask import Flask, request
-import ujson as json
+import json
 import numpy as np
 
 from . import predict as pred

@@ -3,7 +3,7 @@ import pytest
 from ..src import backend_api as ba
 
 import matplotlib.image as mpimg
-import ujson as json
+import json
 from pathlib import Path
 
 
