@@ -280,4 +280,4 @@ def update_download_link(size_distr_json):
 
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=True)
+    dash_app.run_server(debug=True, host='0.0.0.0')
