@@ -117,10 +117,38 @@ def app_layout():
                 'fontSize': 12
             }
         ),
-        html.Hr(),
+        html.Img(
+            id='raw_image',
+            style={
+                'height': 192,
+                'width': 256,
+                'display': 'block',
+                'margin-right': 'auto',
+                'margin-left': 'auto'
+            }
+        ),
 
+        # Loading progress
+        dcc.Loading(
+            html.Div(id='pred_json', style={'display': 'none'}),
+            type='cube'
+        ),
+
+        html.Hr(),
+        html.Div(
+            dcc.Input(
+                id='binsize',
+                placeholder='Enter Bin Size',
+                type='number',
+                debounce=True,
+                min=1
+            ),
+            style={'display': 'flex', 'justify-content': 'center'}
+        ),
         # Histogram
-        dcc.Graph(id='size_distr_graph'),
+        dcc.Graph(
+            id='size_distr_graph'
+        ),
         html.A(
             'Download Data',
             id='download-link',
@@ -211,22 +239,21 @@ def app_layout():
                 html.B('lawrence.fy.wang@gmail.com'),
                 html.P('Also check out the user docs for more information:'),
                 html.A(
-                    """
-                    https://github.com/lwang94
-                    /sem_size_analysis/tree/master/docs/user_docs.md
-                    """,
+                    (
+                        "https://github.com/lwang94"
+                        "/sem_size_analysis/blob/master"
+                        "/docs/user_docs.md"
+                    ),
                     href=(
-                        """
-                        https://github.com/lwang94
-                        /sem_size_analysis/tree/master/docs/user_docs.md
-                        """
+                        "https://github.com/lwang94"
+                        "/sem_size_analysis/blob/master"
+                        "/docs/user_docs.md"
                     )
                 )
             ],
             style={'textAlign': 'center'}
         ),
 
-        # Hidden Divs containing json data
-        html.Div(id='pred_json', style={'display': 'none'}),
+        # Hidden Div containing size distribution json data
         html.Div(id='size_distr_json', style={'display': 'none'})
     ])

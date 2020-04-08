@@ -35,7 +35,7 @@ def test_resize(test_image):
     by asserting the output shape
     """
     img = test_image
-    img = td.resize(img, (192, 256))
+    img = td.resize(img, (256, 192))
     assert img.shape == (192, 256, 3)
 
 

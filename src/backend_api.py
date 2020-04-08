@@ -6,6 +6,7 @@ from . import predict as pred
 from . import transform_data as td
 from . import config as cf
 
+
 flask_app = Flask(__name__)
 host = cf.HOST
 port = cf.BACKEND_PORT
@@ -24,7 +25,7 @@ def predict():
     # perform data transformations
     if len(im.shape) == 2:
         im = td.make_3channel(im)
-    img = td.resize(im, (192, 256))
+    img = td.resize(im, (256, 192))
     img = td.fastai_image(img)
 
     # make prediction

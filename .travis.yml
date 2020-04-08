@@ -3,6 +3,8 @@ python:
  - '3.6'
 install:
  - pip install -r requirements.txt
+ - pip install pytest-cov
+ - pip install flake8
 script:
  - pytest --cov-config=.coveragerc --cov=sem_size_analysis tests/
  - flake8

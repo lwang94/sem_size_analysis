@@ -150,7 +150,8 @@ def display_filename(filename):
 
 
 @dash_app.callback(
-    Output('ximage', 'src'),
+    [Output('ximage', 'src'),
+     Output('raw_image', 'src')],
     [Input('upload-image', 'contents'),
      Input('demo', 'n_clicks')]
 )
@@ -168,7 +169,7 @@ def display_ximage(contents, n_clicks):
     # otherwise, use the user uplaoded image
     else:
         imgb64 = contents
-    return imgb64
+    return imgb64, imgb64
 
 
 @dash_app.callback(
@@ -213,16 +214,22 @@ def show_labeled_pred(size_distr_json):
 
 @dash_app.callback(
     Output('size_distr_graph', 'figure'),
-    [Input('size_distr_json', 'children')]
+    [Input('size_distr_json', 'children'),
+     Input('binsize', 'value')]
 )
-def update_hist(size_distr_json):
+def update_hist(size_distr_json, value):
     """Displays histogram of size distribution"""
     data = json.loads(size_distr_json)
     size_distr = np.asarray(data['size_distr_list'])
+    if value is None:
+        bin_size = 10
+    else:
+        bin_size = value
+
     return {
         'data': [go.Histogram(
                     x=size_distr,
-                    xbins={'size': 5}
+                    xbins={'size': bin_size}
                 )],
         'layout': go.Layout(
             title={
@@ -273,4 +280,4 @@ def update_download_link(size_distr_json):
 
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=True)
+    dash_app.run_server(debug=True, host='0.0.0.0')
