@@ -2,8 +2,10 @@ import numpy as np
 from . import config as cf
 from pathlib import Path
 
-import gdown
+# import gdown
 from fastai.vision import load_learner
+
+import boto3
 
 import cv2
 
@@ -17,8 +19,11 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     if filename.exists():
         learn = load_learner(path, model)
     else:
-        url = cf.MODEL_URL
-        gdown.download(url, model, quiet=False)
+        s3client = boto3.client('s3')
+        s3client.download_file('saemimodel', 'stage-2_bs24_rnet18.pkl', str(path / model))
+
+        # url = cf.MODEL_URL
+        # gdown.download(url, 'stage-2_bs24_rnet18.pkl', quiet=False)
         learn = load_learner(path, model)
     return learn
 

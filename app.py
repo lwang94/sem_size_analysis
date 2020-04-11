@@ -15,6 +15,7 @@ import base64
 import app_layout as al
 
 
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 dash_app = dash.Dash(
@@ -23,7 +24,6 @@ dash_app = dash.Dash(
 )
 server = dash_app.server
 backend_url = 'https://saemi-backend.herokuapp.com/'
-
 
 # helper functions
 def b64_2_numpy(string):
@@ -280,4 +280,4 @@ def update_download_link(size_distr_json):
 
 
 if __name__ == '__main__':
-    dash_app.run_server(debug=True, host='0.0.0.0')
+    dash_app.run_server(debug=True)
