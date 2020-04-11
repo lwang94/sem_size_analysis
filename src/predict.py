@@ -19,11 +19,7 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
     if filename.exists():
         learn = load_learner(path, model)
     else:
-        s3client = boto3.client(
-            's3',
-            aws_access_key_id='AKIAZBOHWE5IGXVOGMNN',
-            aws_secret_access_key='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'
-        )
+        s3client = boto3.client('s3')
         s3client.download_file(
             'saemimodel',
             'stage-2_bs24_rnet18.pkl',
