@@ -21,7 +21,7 @@ dash_app = dash.Dash(
     external_stylesheets=external_stylesheets
 )
 server = dash_app.server
-backend_url = 'https://saemi-backend.herokuapp.com/'
+backend_url = 'https://saemis3-backend.herokuapp.com/'
 
 
 # helper functions
