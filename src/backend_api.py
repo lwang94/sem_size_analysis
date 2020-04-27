@@ -70,5 +70,6 @@ def get_size_distr():
             'size_distr_list': size_distr.tolist()
     })
 
+
 if __name__ == '__main__':
     flask_app.run(debug=True, host=host, port=port)

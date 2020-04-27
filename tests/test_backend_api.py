@@ -65,7 +65,6 @@ def test_orig_size_distr(client, test_arr):
     )
     dat = json.loads(res.data)
 
-    assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)
     assert isinstance(dat['size_distr_list'], list)
