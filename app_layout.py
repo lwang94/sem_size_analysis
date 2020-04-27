@@ -1,7 +1,6 @@
 import dash_core_components as dcc
 import dash_html_components as html
 from dash_canvas import DashCanvas
-import plotly.graph_objs as go
 
 from pathlib import Path
 
@@ -127,7 +126,7 @@ def app_layout():
                     # Uniquely Labeled Prediction Image
                     html.Div(
                         children=[
-                            html.H2(children='Uniquely Labeled Segments'),
+                            html.H2(children='Process Image'),
                             html.Pre(
                                 children=open_txt_doc('remove_note.txt')
                             ),
@@ -137,13 +136,23 @@ def app_layout():
                                         id='postprocessing',
                                         width=768,
                                         height=576,
-                                        hide_buttons=['zoom', 'pan', 'line', 'pencil', 'rectangle', 'select']
+                                        hide_buttons=[
+                                            'zoom',
+                                            'pan',
+                                            'line',
+                                            'pencil',
+                                            'rectangle',
+                                            'select'
+                                        ]
                                     ),
                                     dcc.RadioItems(
                                         id='showitem',
                                         options=[
                                             {'label': 'B/W', 'value': 'bw'},
-                                            {'label': 'Colour', 'value': 'colour'}
+                                            {
+                                                'label': 'Colour',
+                                                'value': 'colour'
+                                            }
                                         ],
                                         value='bw',
                                         labelStyle={'display': 'inline-block'}
@@ -162,12 +171,24 @@ def app_layout():
                                     dcc.Dropdown(
                                         id='colourpicker',
                                         options=[
-                                            {'label': 'Draw (white)', 'value': 'draw'},
-                                            {'label': 'Remove (red)', 'value': 'remove'},
-                                            {'label': 'Erase (black)', 'value': 'erase'}
+                                            {
+                                                'label': 'Draw (white)',
+                                                'value': 'draw'
+                                            },
+                                            {
+                                                'label': 'Remove (red)',
+                                                'value': 'remove'
+                                            },
+                                            {
+                                                'label': 'Erase (black)',
+                                                'value': 'erase'
+                                            }
                                         ],
                                         value='draw',
-                                        style={'width': '300px', 'margin': 'auto'}
+                                        style={
+                                            'width': '300px',
+                                            'margin': 'auto'
+                                        }
                                     )
                                 ],
                                 style={'display': 'inline-block'}
@@ -179,7 +200,9 @@ def app_layout():
                     # Original Image and Overlay
                     html.Div(
                         children=[
-                            html.H2(children='Overlay of Original with Segments'),
+                            html.H2(
+                                children='Overlay of Original with Segments'
+                            ),
                             html.Pre(
                                 children=open_txt_doc('resize_warning.txt'),
                                 style={'margin-bottom': '32px'}
@@ -231,7 +254,9 @@ def app_layout():
                             """
                         ),
                         html.B('lawrence.fy.wang@gmail.com'),
-                        html.P('Also check out the user docs for more information:'),
+                        html.P(
+                            'Check out the user docs for more information:'
+                        ),
                         html.A(
                             (
                                 "https://github.com/lwang94"

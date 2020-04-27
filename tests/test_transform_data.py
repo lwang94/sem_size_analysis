@@ -29,16 +29,6 @@ def test_fastai_image(test_image):
     assert isinstance(img, Image)
 
 
-def test_resize(test_image):
-    """
-    Tests resize function in transform_data
-    by asserting the output shape
-    """
-    img = test_image
-    img = td.resize(img, (256, 192))
-    assert img.shape == (192, 256, 3)
-
-
 def test_make_3channel():
     """
     Tests make_3channel function in transform_data

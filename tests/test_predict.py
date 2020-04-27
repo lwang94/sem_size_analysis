@@ -2,7 +2,9 @@ import matplotlib.image as mpimg
 from fastai.vision import Learner
 
 from ..src import predict
-from ..src.transform_data import resize, fastai_image
+from ..src.transform_data import fastai_image
+
+from skimage.transform import resize
 
 from pathlib import Path
 import numpy as np
@@ -40,12 +42,12 @@ def test_predict_segment(learn):
     img = mpimg.imread(img_path)
 
     # transform image to use in model
-    img = resize(img, (192, 256))
+    img = resize(img, (192, 256), order=1)
     img = fastai_image(img)
 
     # make prediction and assertions
     pred = predict.predict_segment(learn, img)
-    assert pred.shape == (1, 192, 256)
+    assert pred.shape == (192, 256)
     assert sorted(list(np.unique(pred))) == [0, 1]
 
 
