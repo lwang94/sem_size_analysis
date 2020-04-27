@@ -7,45 +7,12 @@ import numpy as np
 from fastai.vision import Image
 from torch import FloatTensor
 
-import cv2
-
 
 def fastai_image(img):
     """Turns numpy array into fastai Image object"""
     img = FloatTensor(img)
     img = img.permute(2, 0, 1)
     return Image(img)
-
-
-def resize(img, size, order=1):
-    """
-    Resizes img into appropriate size using Nth order interpolation
-
-    Parameters
-    ------------------------------------------
-    img : ndarray
-        Contains image data
-    size : tuple
-        Contains width and height for resized image
-    order : int, optional
-        Order of the spline interpolation. Has to be in range 0-5.
-        Defaults to 1.
-
-    Returns
-    ------------------------------------
-    resized_img : ndarray
-    """
-    orig_shape = img.shape[:-1]
-    sigx = ((orig_shape[1] / size[0]) - 1) / 2
-    sigy = ((orig_shape[0] / size[1]) - 1) / 2
-    img = cv2.GaussianBlur(
-        img,
-        (0, 0),
-        sigx,
-        sigy,
-        borderType=cv2.BORDER_REFLECT_101
-    )
-    return (cv2.resize(img, size, interpolation=cv2.INTER_LINEAR) - 1) / 255
 
 
 def make_3channel(img):
