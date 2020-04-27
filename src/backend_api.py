@@ -70,50 +70,5 @@ def get_size_distr():
             'size_distr_list': size_distr.tolist()
     })
 
-
-# @flask_app.route('/api/clicked_size_distr', methods=['POST'])
-# def clicked_size_distr():
-#     """
-#     Obtains size distribution of image after user has clicked on
-#     image to indicate which segment they would like to remove.
-#     """
-#     # get requested json
-#     content = request.get_json()
-#     data_size_distr = json.loads(content['size_distr_json'])
-#     click = content['click']
-#     data_pred = json.loads(content['data_pred'])
-
-#     # pull previous values from size_distr_json
-#     rgb = np.asarray(data_size_distr['rgb_pred_list'], dtype=np.uint8)
-#     labeled = data_size_distr['labeled_list']
-#     unique = np.asarray(data_size_distr['unique_list'])
-#     size_distr = np.asarray(data_size_distr['size_distr_list'])
-
-#     # remove data based on where the user has clicked
-#     if click is not None:
-#         # grab coordinates of where the user clicked
-#         xclick, yclick = click['points'][0]['x'], click['points'][0]['y']
-
-#         # remove all values that match the value located where the user clicked
-#         remove = np.where(unique == labeled[191 - yclick][xclick])[0]
-#         unique = np.delete(unique, remove)
-#         size_distr = np.delete(size_distr, remove)
-#         click_r, click_g, click_b = rgb[191 - yclick, xclick, :]
-#         mask = (
-#             (rgb[:, :, 0] == click_r)
-#             & (rgb[:, :, 1] == click_g)
-#             & (rgb[:, :, 2] == click_b)
-#         )
-#         rgb[mask] = [0, 0, 0]
-
-#     return json.dumps({
-#         'content_type': data_pred['content_type'],
-#         'rgb_pred_list': rgb.tolist(),
-#         'labeled_list': labeled,
-#         'unique_list': unique.tolist(),
-#         'size_distr_list': size_distr.tolist()
-#     })
-
-
 if __name__ == '__main__':
     flask_app.run(debug=True, host=host, port=port)

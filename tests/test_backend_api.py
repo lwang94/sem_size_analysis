@@ -54,7 +54,7 @@ def test_orig_size_distr(client, test_arr):
     with the correct keys
     """
     res = client.post(
-        '/api/orig_size_distr',
+        '/api/get_size_distr',
         json={
             'data_pred': json.dumps({
                 'content_type': 'data:image/jpg;base64',
@@ -65,46 +65,6 @@ def test_orig_size_distr(client, test_arr):
     )
     dat = json.loads(res.data)
 
-    assert isinstance(dat['rgb_pred_list'], list)
-    assert isinstance(dat['labeled_list'], list)
-    assert isinstance(dat['unique_list'], list)
-    assert isinstance(dat['size_distr_list'], list)
-
-
-def test_clicked_size_distr(client, test_arr):
-    """
-    Tests clicked_size_distr function in flask_api by
-    asserting the output json contains lists and strings
-    with the correct keys
-    """
-    test_list = test_arr.tolist()
-    res = client.post(
-        '/api/clicked_size_distr',
-        json={
-            'data_pred': json.dumps({
-                'content_type': 'data:image/jpg;base64',
-                'rf': 2,
-                'yimage_list': test_arr[:, :, 0].tolist()
-            }),
-            'click': {
-                'points': [{
-                    'curveNumber': 0,
-                    'pointNumber': 9927,
-                    'pointIndex': 9927,
-                    'x': 199,
-                    'y': 38
-                }]
-            },
-            'size_distr_json': json.dumps({
-                'content_type': 'data:image/jpg;base64',
-                'rgb_pred_list': test_list,
-                'labeled_list': test_arr[:, :, 0].tolist(),
-                'unique_list': [1, 2, 3],
-                'size_distr_list': [1, 2, 3]
-            })
-        }
-    )
-    dat = json.loads(res.data)
     assert isinstance(dat['rgb_pred_list'], list)
     assert isinstance(dat['labeled_list'], list)
     assert isinstance(dat['unique_list'], list)

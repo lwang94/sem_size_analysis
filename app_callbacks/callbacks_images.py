@@ -75,7 +75,11 @@ def images_callbacks(app):
         # create blue and gold overlay
         lookup = np.asarray([[153, 153, 0], [45, 0, 78]], dtype=np.uint8)
         colour = lookup[pred_copy['yimage_list']]
-        encoded_colour = pred_copy['content_type'] + ',' + cu.numpy_2_b64(colour)
+        encoded_colour = (
+            pred_copy['content_type']
+            + ','
+            + cu.numpy_2_b64(colour)
+        )
 
         # create labeled image
         unique = size_distr['unique_list']
@@ -106,9 +110,11 @@ def images_callbacks(app):
 
         # convert from numpy array to base64 image
         # rgb = np.asarray(data['rgb_pred_list'], dtype=np.uint8)
-        encoded_rgb = size_distr['content_type'] + ',' + cu.numpy_2_b64(rgb_labeled)
-
-
+        encoded_rgb = (
+            size_distr['content_type']
+            + ','
+            + cu.numpy_2_b64(rgb_labeled)
+        )
         return [encoded_pred, encoded_colour, encoded_rgb]
 
     @app.callback(
