@@ -5,7 +5,7 @@ from pathlib import Path
 import gdown
 from fastai.vision import load_learner
 
-import cv2
+from skimage import measure
 
 
 def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
@@ -18,7 +18,7 @@ def fetch_learner(path=Path(__file__).parents[1], model=cf.MODEL):
         learn = load_learner(path, model)
     else:
         url = cf.MODEL_URL
-        gdown.download(url, model, quiet=False)
+        gdown.download(url, 'stage-2_bs24_rnet18.pkl', quiet=False)
         learn = load_learner(path, model)
     return learn
 
@@ -40,7 +40,7 @@ def predict_segment(learner, img):
         Contains segmentation mask data
     """
     pred = learner.predict(img)[0]
-    return pred.data
+    return 1 - pred.data.numpy()[0]
 
 
 def get_size_distr(pred):
@@ -62,8 +62,6 @@ def get_size_distr(pred):
         the background.
     """
     # labels each connected region with a unique value
-    unique, pred_labeled, stats, centroid = cv2.connectedComponentsWithStats(
-                                                1 - pred,
-                                                connectivity=4
-                                            )
-    return pred_labeled, np.arange(1, unique), stats[1:, -1]
+    pred_labeled = measure.label(pred, background=0, connectivity=1)
+    unique, size_distr = np.unique(pred_labeled, return_counts=True)
+    return pred_labeled, unique[1:], size_distr[1:]

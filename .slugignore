@@ -4,7 +4,6 @@ tests/*
 .coveragerc
 .dockerignore
 .travis.yml
-Dockerfile
 LICENSE
 README.md
 setup.py
