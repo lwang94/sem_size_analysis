@@ -11,7 +11,7 @@ from app_callbacks import callbacks_images
 
 dash_app = dash.Dash(__name__)
 server = dash_app.server
-backend_url = 'https://saemi2-backend.herokuapp.com/'
+backend_url = 'https://saemi-backend.herokuapp.com/'
 
 # dashboard layout
 dash_app.layout = al.app_layout()

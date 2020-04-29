@@ -88,9 +88,15 @@ def app_layout():
                 dcc.Loading(
                     children=[
                         html.Div(id='pred_json', style={'display': 'none'}),
-                        html.Div(id='pred_json_copy', style={'display': 'none'}),
+                        html.Div(
+                            id='pred_json_copy',
+                            style={'display': 'none'}
+                        ),
                         html.Div(id='images_data', style={'display': 'none'}),
-                        html.Div(id='size_distr_json', style={'display': 'none'})
+                        html.Div(
+                            id='size_distr_json',
+                            style={'display': 'none'}
+                        )
                     ],
                     type='default'
                 ),
