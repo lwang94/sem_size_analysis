@@ -1,3 +1,5 @@
+"""Frontend callbacks to communicate to the backend API"""
+
 import dash
 from dash.dependencies import Input, Output
 

@@ -1,0 +1,3 @@
+NOTE: If the app does not provide a satisfactory segmentation of the image, 
+you can edit it using the canvas below. Use the slider to change brush width
+and the dropdown menu below to select the colour of your brush. 

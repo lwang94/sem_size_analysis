@@ -1,3 +1,5 @@
+"""Unit tests for the backend API"""
+
 import pytest
 
 from ..src import backend_api as ba

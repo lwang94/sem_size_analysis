@@ -1,3 +1,5 @@
+"""Unit tests for the prediction functions"""
+
 import matplotlib.image as mpimg
 from fastai.vision import Learner
 

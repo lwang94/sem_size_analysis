@@ -1,3 +1,5 @@
+"""Unit tests for the configuration variables"""
+
 from ..src import config as cf
 import numpy as np
 

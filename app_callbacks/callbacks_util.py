@@ -1,3 +1,5 @@
+"""Utility functions to help other callback functions"""
+
 import base64
 from PIL import Image
 import io

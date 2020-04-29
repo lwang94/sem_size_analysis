@@ -1,4 +1,4 @@
-"""training.py configurations"""
+"""Configuration variables"""
 
 import os
 import numpy as np
