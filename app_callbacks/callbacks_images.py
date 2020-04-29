@@ -1,3 +1,5 @@
+"""Frontend callbacks to show images"""
+
 import dash
 from dash.dependencies import Input, Output, State
 from dash_canvas.utils import array_to_data_url
@@ -65,6 +67,7 @@ def images_callbacks(app):
         [State('pred_json_copy', 'children')]
     )
     def create_images(size_distr_json, pred_json_copy):
+        """Creates all the relevant base64 image strings"""
         size_distr = json.loads(size_distr_json)
         pred_copy = json.loads(pred_json_copy)
 
@@ -124,6 +127,8 @@ def images_callbacks(app):
          Input('opacity_value', 'value')]
     )
     def display_yimage(images, op_val):
+        """Displays purple and gold prediction"""
+
         # specify style
         style = {
             'position': 'absolute',
@@ -141,16 +146,18 @@ def images_callbacks(app):
          Input('images_data', 'children')]
     )
     def image_postprocess(value, images):
+        """Displays image in dash canvas"""
         if value == 'bw':
-            return images[0]
+            return images[0]  # binary prediction
         else:
-            return images[2]
+            return images[2]  # uniquely labeled pred
 
     @app.callback(
         Output('postprocessing', 'lineColor'),
         [Input('colourpicker', 'value')]
     )
     def pick_color(pick):
+        """Changes colour of the canvas brush"""
         if pick == 'draw':
             colour = 'white'
         elif pick == 'remove':
@@ -164,4 +171,5 @@ def images_callbacks(app):
         [Input('brushwidth', 'value')]
     )
     def update_brushwidth(val):
+        """Changes width of the canvas brush"""
         return val

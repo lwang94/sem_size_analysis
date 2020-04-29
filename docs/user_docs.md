@@ -55,12 +55,23 @@ and the final array would be:
 <b>Please note that the "sizes" that are calculated is the number of pixels that a particle takes up in the image and it is left up to the user to convert from pixels
 to a physical size</b>. 
 
+# Postprocess Image
+----------------------------
+Two images should be shown below the histogram, a purple and gold mask and a black and white mask. Both of these images are the segmented prediction from the deep learning model. The purple and gold mask
+is overlaid the original raw image so the user can compare how well the model predicted the image. Use the slider below the overlaid images to change the opacity of the prediction.
+
+The black and white mask is displayed over a canvas that the user can draw over to edit the prediction if they are unsatisfied with it. There are three options for how the user can edit the prediction: 
+Draw, Remove, or Erase. Their functions are as follows:
+
+- Draw (white): add the brush strokes to the prediction
+- Remove (red): any particle marked by a red brush will be removed from the prediction
+- Erase (black): erase the wiped area from the prediction
+
+As well, the image displayed over the canvas can be either the black and white mask or the uniquely labeled mask. This is to help differentiate instances of different particles in the prediction. To change
+between the displays, choose between the "B/W" (black and white) option or the "Colour" (uniquely labeled) option below the canvas image. Finally, the brush width can be changed using the slider below the 
+canvas image.
+
 # Display Histogram & Segmented Image
 ----------------------------
-Finally, a histogram of the size distribution is displayed with the Mean, Median, and Standard Deviation of sizes already calculated. The size distribution list can be downloaded by clicking
-on <b>Download Data</b>. Below the histogram, the uniquely labeled segmented binary image is shown on the left and on the right is the segmented binary image overlayed with the original image so 
-the user can determine the success of the segmentation. 
-
-Users can click on uniquely labeled segments (particles) in the left image to remove them from the size distribution. This is to account for any potentially mislabeled segments that introduce 
-error into the size distribution. The slider below the right image can be used to change the opacity of the segmented binary image so that users can choose to see more of the original image
-or more of the segmented binary image.
+Finally, a histogram of the size distribution is displayed with the Mean, Median, and Standard Deviation of sizes already calculated. The bin size can be changed using the input box above the histogram. 
+The size distribution list can also be downloaded as a .csv file by clicking on <b>Download Data</b>. At this point, any further calculations can be done at the users discretion using the downloaded .csv file. 

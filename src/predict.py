@@ -1,3 +1,5 @@
+"""Functions to make predictions using the deep learning model"""
+
 import numpy as np
 from . import config as cf
 from pathlib import Path

@@ -1,3 +1,5 @@
+"""Generates front end server"""
+
 import dash
 
 import app_layout as al
@@ -5,12 +7,11 @@ from app_callbacks import callbacks_backend
 from app_callbacks import callbacks_misc
 from app_callbacks import callbacks_hist
 from app_callbacks import callbacks_images
-# from src import config as cf
+
 
 dash_app = dash.Dash(__name__)
 server = dash_app.server
 backend_url = 'https://saemi2-backend.herokuapp.com/'
-# backend_url = f'http://{cf.HOST}:{cf.BACKEND_PORT}'
 
 # dashboard layout
 dash_app.layout = al.app_layout()

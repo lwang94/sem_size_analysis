@@ -1,3 +1,5 @@
+"""Generates server for backend API"""
+
 from flask import Flask, request
 import json
 import numpy as np

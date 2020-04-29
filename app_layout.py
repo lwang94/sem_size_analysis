@@ -1,3 +1,5 @@
+"""Generates front end layout"""
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash_canvas import DashCanvas
@@ -20,7 +22,9 @@ def app_layout():
             children=[
                 # Title
                 html.H1(
-                    children='SAEMI: An End to End Size Analysis Tool',
+                    children="""
+                        SAEMI: Size Analysis of Electron Microscopy Images
+                    """,
                     style={'textAlign': 'center'}
                 ),
 
@@ -60,7 +64,7 @@ def app_layout():
                     style={'display': 'flex', 'justify-content': 'center'}
                 ),
 
-                # Display filename after uploading
+                # Display image and filename after uploading
                 html.H1(
                     id='file_name',
                     style={
@@ -82,25 +86,36 @@ def app_layout():
 
                 # Loading progress
                 dcc.Loading(
-                    html.Div(id='pred_json', style={'display': 'none'}),
-                    type='cube'
+                    children=[
+                        html.Div(id='pred_json', style={'display': 'none'}),
+                        html.Div(id='pred_json_copy', style={'display': 'none'}),
+                        html.Div(id='images_data', style={'display': 'none'}),
+                        html.Div(id='size_distr_json', style={'display': 'none'})
+                    ],
+                    type='default'
                 ),
 
-                html.Hr()
+                html.Hr(),
             ],
             className='one row'
         ),
         html.Div(
             children=[
                 html.Div(
-                    dcc.Input(
-                        id='binsize',
-                        placeholder='Enter Bin Size',
-                        type='number',
-                        debounce=True,
-                        min=1
-                    ),
-                    style={'display': 'flex', 'justify-content': 'center'}
+                    children=[
+                        html.H2(
+                            'Enter Bin Size',
+                            style={'fontSize': 16}
+                        ),
+                        dcc.Input(
+                            id='binsize',
+                            value=25,
+                            type='number',
+                            debounce=True,
+                            min=1
+                        )
+                    ],
+                    style={'display': 'inline-block'}
                 ),
                 # Histogram
                 dcc.Graph(
@@ -111,13 +126,12 @@ def app_layout():
                     id='download-link',
                     href='',
                     target='_blank',
-                    style={'display': 'flex', 'justify-content': 'center'}
+                    style={'display': 'inline-block'}
                 ),
-                # Hidden Div containing size distribution json data
-                html.Div(id='size_distr_json', style={'display': 'none'}),
                 html.Hr()
             ],
-            className='one row'
+            className='one row',
+            style={'textAlign': 'center'}
         ),
         html.Div(
             children=[
@@ -128,7 +142,8 @@ def app_layout():
                         children=[
                             html.H2(children='Process Image'),
                             html.Pre(
-                                children=open_txt_doc('remove_note.txt')
+                                children=open_txt_doc('postprocessing.txt'),
+                                style={'margin-bottom': '32px'}
                             ),
                             html.Div(
                                 children=[
@@ -235,8 +250,6 @@ def app_layout():
                         className='six columns'
                     ),
                 ]),
-                html.Div(id='pred_json_copy', style={'display': 'none'}),
-                html.Div(id='images_data', style={'display': 'none'}),
                 html.Hr()
             ],
             className='one row'

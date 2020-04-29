@@ -1,3 +1,5 @@
+"""Miscellaneous frontend callbacks (most are before a prediction is made)"""
+
 import dash
 from dash.dependencies import Input, Output
 
@@ -36,6 +38,7 @@ def misc_callbacks(app, open_txt_doc):
          Input('demo', 'n_clicks')]
     )
     def display_ximage(contents, n_clicks):
+        """Show raw image"""
         ctx = dash.callback_context
 
         # if try the demo has been clicked, use the demo image

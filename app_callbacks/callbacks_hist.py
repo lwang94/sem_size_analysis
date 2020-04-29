@@ -1,3 +1,5 @@
+"""Frontend callbacks to generate histogram"""
+
 from dash.dependencies import Input, Output, State
 
 import json
@@ -13,19 +15,15 @@ def hist_callbacks(app):
         [Input('size_distr_json', 'children'),
          Input('binsize', 'value')]
     )
-    def update_hist(size_distr_json, value):
+    def update_hist(size_distr_json, binsize):
         """Displays histogram of size distribution"""
         data = json.loads(size_distr_json)
         size_distr = np.asarray(data['size_distr_list'])
-        if value is None:
-            bin_size = 10
-        else:
-            bin_size = value
 
         return {
             'data': [go.Histogram(
                         x=size_distr,
-                        xbins={'size': bin_size}
+                        xbins={'size': binsize}
                     )],
             'layout': go.Layout(
                 title={
@@ -66,6 +64,7 @@ def hist_callbacks(app):
         [State('upload-image', 'filename')]
     )
     def update_download_link(size_distr_json, fname):
+        """Generates linke to download .csv file"""
         data = json.loads(size_distr_json)
         size_distr = np.asarray(data['size_distr_list'])
 
@@ -73,4 +72,11 @@ def hist_callbacks(app):
         buff = io.StringIO()
         csv_string = np.savetxt(buff, size_distr, encoding='utf-8')
         csv_string = 'data:text/csv;charset=utf-8,' + buff.getvalue()
-        return csv_string, f'{fname}_distr.csv'
+
+        # name of .csv file
+        if fname is None:
+            filename = 'demo_distr.csv'
+        else:
+            filename = f'{fname}_distr.csv'
+
+        return csv_string, filename
