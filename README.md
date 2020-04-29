@@ -24,10 +24,14 @@ You can find the app hosted on Heroku [here](https://saemi.herokuapp.com/)
 -------------
 Please check the [user docs](https://github.com/lwang94/sem_size_analysis/blob/master/docs/user_docs.md) for more details. 
 Below is a summary of the steps a user would take to obtain the size distribution of an electron microscopy image using this app. 
+
 1. Preprocess the image: before using the app, remove any metadata such as the scale bar that may interfere with the deep learning prediction
+
 2. Upload the image: upload the image to the app using the buttons on the homepage. The image will then be segmented by the model and a size distribution calculated from the segmentation
+
 3. Postprocess the image: After tbe size distribution is calculated, the user can edit the prediction to give more accurate results in case the model did not satisfactorily segment the image. 
 Check the [user docs](https://github.com/lwang94/sem_size_analysis/blob/master/docs/user_docs.md) for more details on post processing
+
 4. Download the calculated particle sizes as a .csv file using the Download link provided. Keep in mind that the particle sizes are in units of pixels so it is up to the user to convert
 that to a physical distance.
 
