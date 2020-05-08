@@ -4,8 +4,8 @@ import os
 import numpy as np
 from pathlib import Path
 
-BACKEND_PORT = int(os.environ.get("PORT", 5000))
-HOST = 'localhost'
+BACKEND_PORT = int(os.environ.get("PORT", 8000))
+HOST = '0.0.0.0'
 
 MODEL = 'stage-2_bs24_rnet18.pkl'
 MODEL_URL = 'https://drive.google.com/uc?id=1zRKUO__57xLdBKDe_xoYuLKh8-pUqdSh'

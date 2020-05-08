@@ -5,11 +5,11 @@ The deep learning model is a [unet](https://arxiv.org/pdf/1505.04597.pdf) with a
 through the [fastai](https://github.com/fastai/fastai) library. See below for a brief outline of the computation
 process:
 
-Upload Image &rarr; Preprocess Image &rarr; Segment Image Using U-net Model &rarr; Give Unique Labels to Each Segment and Count Them &rarr; Display Histogram & Segmented Image
+![outline](resources/flowchart.png)
 
 # Upload Image
 ---------------------
-To upload an image, use the <b> UPLOAD IMAGE </b> at the top of the app. To ensure that the best results are obtained for this app, 
+To upload an image, use the `Upload Image` at the top of the app. To ensure that the best results are obtained for this app, 
 please ensure that the image has minimal noise and imaging artifacts. Watermarks and additional meta information (such as the scale bar) may also
 be mislabeled as a particle during the segmentation process and so should be removed before uploading (although mislabeled segement can be removed
 post segmentation; see Display Histogram and Segmented Image below). Tools to minimize noise or remove watermarks include Python based libraries 
@@ -74,4 +74,4 @@ canvas image.
 # Display Histogram & Segmented Image
 ----------------------------
 Finally, a histogram of the size distribution is displayed with the Mean, Median, and Standard Deviation of sizes already calculated. The bin size can be changed using the input box above the histogram. 
-The size distribution list can also be downloaded as a .csv file by clicking on <b>Download Data</b>. At this point, any further calculations can be done at the users discretion using the downloaded .csv file. 
+The size distribution list can also be downloaded as a .csv file by clicking on `Download Data`. At this point, any further calculations can be done at the users discretion using the downloaded .csv file. 

@@ -1,7 +1,6 @@
 # SAEMI
 
 ## Description
---------------
 SAEMI (Size Analysis for Electron Microscopy Images) is a tool for obtaining the size distribution of nanoparticles in electron microscopy images. 
 It uses an image segmentation model trained through a neural network to detect nanoparticle sizes and locations. The neural network used is a [u-net](https://arxiv.org/pdf/1505.04597.pdf) 
 with a resnet downsample created through the [fastai](https://github.com/fastai/fastai) library. From there, it then obtains a histogram of the sizes of each particle, providing important 
@@ -9,7 +8,6 @@ information such as mean particle size, median particle size etc. This tool can 
 ensure quality control for routine synthesis and much more. 
 
 ## Dependencies
-----------------
 - Python == 3.6
 - dash == 1.9.1
 - dash-canvas == 0.1.0
@@ -17,11 +15,33 @@ ensure quality control for routine synthesis and much more.
 - gdown == 3.10.1
 
 ## Website
--------------
 You can find the app hosted on Heroku [here](https://saemi.herokuapp.com/)
 
+## To Run Locally
+### Using Docker
+The easiest way to run the app locally is to run it as a docker container. If you wish to use this method, please ensure you have docker installed on your local machine. You can get
+docker from: https://docs.docker.com/get-docker/
+
+After obtaining docker, simply clone the repo into a local directory and run the following command:
+```
+docker-compose up
+```
+
+### Without Docker
+If you wish to run the app locally without using docker, first clone the repo into a local directory. As well, please ensure you have the above dependencies installed. If you already have
+Python 3.6 installed, you can install the rest of the dependencies by running `pip install -r requirements.txt` after cloning the repo. 
+
+Once the dependencies have been succesfully installed, go into the cloned repo and from the command line run:
+```
+python -m src.backend_api
+```
+This will run the backend server on `http://0.0.0.0:8000`. To run the frontend server, run the following in a separate command line (also from the cloned repo directory):
+```
+python -m app
+```
+This will run the frontend server on `http://127.0.0.1:8050/`. Copy and paste the link into your web browser and you can use the app from there.
+
 ## Using the App
--------------
 Please check the [user docs](https://github.com/lwang94/sem_size_analysis/blob/master/docs/user_docs.md) for more details. 
 Below is a summary of the steps a user would take to obtain the size distribution of an electron microscopy image using this app. 
 
