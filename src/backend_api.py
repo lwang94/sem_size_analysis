@@ -37,8 +37,6 @@ def predict():
     prediction = pred.predict_segment(learn, img).astype(np.uint8)
     prediction = 255 * resize(prediction, (576, 768), order=0)
     prediction = prediction.astype(np.uint8)
-
-
     resizefactor = (
         im.shape[0] * im.shape[1]
         / (prediction.shape[0] * prediction.shape[1])
