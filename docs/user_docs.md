@@ -65,7 +65,7 @@ Draw, Remove, or Erase. Their functions are as follows:
 - Remove (red): any particle marked by a red brush will be removed from the prediction
 ![remove](resources/saemi_remove.png)
 - Erase (black): erase the wiped area from the prediction
-![erase](resources/samie_erase.png)
+![erase](resources/saemi_erase.png)
 
 As well, the image displayed over the canvas can be either the black and white mask or the uniquely labeled mask. This is to help differentiate instances of different particles in the prediction. To change
 between the displays, choose between the "B/W" (black and white) option or the "Colour" (uniquely labeled) option below the canvas image. Finally, the brush width can be changed using the slider below the 

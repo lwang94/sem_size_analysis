@@ -4,8 +4,6 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash_canvas.utils import array_to_data_url
 
-from skimage.transform import resize
-
 import numpy as np
 import json
 

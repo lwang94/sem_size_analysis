@@ -14,7 +14,7 @@ from src import config as cf
 dash_app = dash.Dash(__name__)
 server = dash_app.server
 # backend_url = 'https://saemi-backend.herokuapp.com/'
-backend_url = f'http://192.168.99.100:{cf.BACKEND_PORT}'
+backend_url = f'http://{cf.HOST}:{cf.BACKEND_PORT}'
 
 # set title
 dash_app.title = 'SAEMI'
