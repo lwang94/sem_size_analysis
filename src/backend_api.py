@@ -21,6 +21,7 @@ learn = pred.fetch_learner()
 
 @flask_app.route('/api/predict', methods=['POST'])
 def predict():
+    print('okay')
     """Obtains image segmentation prediction on image"""
     # get base64 image from requested json
     content = request.get_json()
@@ -33,8 +34,9 @@ def predict():
     img = td.fastai_image(img)
 
     # make prediction
-    prediction = pred.predict_segment(learn, img)
-
+    prediction = pred.predict_segment(learn, img).astype(np.uint8)
+    prediction = 255 * resize(prediction, (576, 768), order=0)
+    prediction = prediction.astype(np.uint8)
     resizefactor = (
         im.shape[0] * im.shape[1]
         / (prediction.shape[0] * prediction.shape[1])

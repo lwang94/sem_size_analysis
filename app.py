@@ -8,10 +8,15 @@ from app_callbacks import callbacks_misc
 from app_callbacks import callbacks_hist
 from app_callbacks import callbacks_images
 
+from src import config as cf
+
 
 dash_app = dash.Dash(__name__)
 server = dash_app.server
-backend_url = 'https://saemi-backend.herokuapp.com/'
+backend_url = f'http://{cf.HOST}:{cf.BACKEND_PORT}'
+
+# set title
+dash_app.title = 'SAEMI'
 
 # dashboard layout
 dash_app.layout = al.app_layout()

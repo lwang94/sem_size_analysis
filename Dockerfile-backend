@@ -10,6 +10,6 @@ RUN pip install --upgrade -r requirements.txt
 COPY . app/
 WORKDIR app/
 
-EXPOSE 8050
+EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8050", "app:server"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "src.backend_api:flask_app"]

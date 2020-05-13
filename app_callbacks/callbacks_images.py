@@ -4,8 +4,6 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash_canvas.utils import array_to_data_url
 
-from skimage.transform import resize
-
 import numpy as np
 import json
 
@@ -33,19 +31,7 @@ def images_callbacks(app):
 
         # if creating pred_json_copy for the first time
         if ctx.triggered[-1]['prop_id'] == 'pred_json.children':
-            pred = json.loads(pred_json)
-
-            # resize the prediction to fit (576, 768) dash canvas
-            ypred = np.asarray(pred['yimage_list'], dtype=np.uint8)
-            ypred = 255 * resize(ypred, (576, 768), order=0)
-            ypred = ypred.astype(np.uint8)
-            resize_factor = pred['rf'] / 9
-
-            return json.dumps({
-                'content_type': pred['content_type'],
-                'rf': resize_factor,
-                'yimage_list': ypred.tolist()
-            })
+            return pred_json
 
         # otherwise, update pred_json_copy based on dash canvas edits
         else:
@@ -63,23 +49,23 @@ def images_callbacks(app):
 
     @app.callback(
         Output('images_data', 'children'),
-        [Input('size_distr_json', 'children')],
-        [State('pred_json_copy', 'children')]
+        [Input('size_distr_json', 'children')]
     )
-    def create_images(size_distr_json, pred_json_copy):
+    def create_images(size_distr_json):
         """Creates all the relevant base64 image strings"""
         size_distr = json.loads(size_distr_json)
-        pred_copy = json.loads(pred_json_copy)
+        pred = np.asarray(size_distr['labeled_list'])
+        pred[pred > 0] = 1
 
         # create black and white image
-        pred = 255 * np.asarray(pred_copy['yimage_list'], dtype=np.uint8)
-        encoded_pred = array_to_data_url(pred)
+        bw_pred = 255 * np.asarray(pred, dtype=np.uint8)
+        encoded_pred = array_to_data_url(bw_pred)
 
         # create blue and gold overlay
         lookup = np.asarray([[153, 153, 0], [45, 0, 78]], dtype=np.uint8)
-        colour = lookup[pred_copy['yimage_list']]
+        colour = lookup[pred]
         encoded_colour = (
-            pred_copy['content_type']
+            size_distr['content_type']
             + ','
             + cu.numpy_2_b64(colour)
         )
