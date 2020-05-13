@@ -3,6 +3,9 @@ experiments/*
 tests/*
 .coveragerc
 .dockerignore
+Dockerfile
+Dockerfile-backend
+docker-compose.yml
 .travis.yml
 LICENSE
 README.md

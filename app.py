@@ -11,7 +11,7 @@ from app_callbacks import callbacks_images
 
 dash_app = dash.Dash(__name__)
 server = dash_app.server
-backend_url = 'saemi-backend.herokuapp.com'
+backend_url = 'https://saemi-backend.herokuapp.com'
 
 # set title
 dash_app.title = 'SAEMI'
