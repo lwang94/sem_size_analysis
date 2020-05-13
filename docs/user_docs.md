@@ -26,7 +26,6 @@ binary image consisting of 0s and 1s where 0 represents a background pixel and 1
 ![segment](resources/saemi_bw.png)
 
 # Give Unique Labels to Each Segment and Count Them
------------------------------------
 To obtain a size distribution, the resulting binary image is further processed. Connected regions of 1s in the binary image is given a unique label eg.
 ```
 [[1, 0, 0, 1, 1],      [[1, 0, 0, 2, 2],
@@ -53,7 +52,6 @@ and the final array would be:
 to a physical size</b>. 
 
 # Postprocess Image
-----------------------------
 Two images should be shown below the histogram, a purple and gold mask and a black and white mask. Both of these images are the segmented prediction from the deep learning model. The purple and gold mask
 is overlaid the original raw image so the user can compare how well the model predicted the image. Use the slider below the overlaid images to change the opacity of the prediction.
 
@@ -72,6 +70,5 @@ between the displays, choose between the "B/W" (black and white) option or the "
 canvas image.
 
 # Display Histogram & Segmented Image
-----------------------------
 Finally, a histogram of the size distribution is displayed with the Mean, Median, and Standard Deviation of sizes already calculated. The bin size can be changed using the input box above the histogram. 
 The size distribution list can also be downloaded as a .csv file by clicking on `Download Data`. At this point, any further calculations can be done at the users discretion using the downloaded .csv file. 
