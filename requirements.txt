@@ -1,4 +1,4 @@
-dash==1.9.1
+dash==2.15.0
 dash-canvas==0.1.0
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.4.0+cpu 
